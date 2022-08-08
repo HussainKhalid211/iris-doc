@@ -76,9 +76,9 @@ class TSSyntaxMatcher(LanguageSyntaxMatcher):
 
     def matchFunction(self, line: str) -> str:
         m = re.match(
-            r'function ([A-Za-z0-9_]+)\((.*)(\)?( {)?|;?)$', line.strip(), re.M | re.I)
+            r'(export\s)?function ([A-Za-z0-9_]+)\((.*)(\)?( {)?|;?)$', line.strip(), re.M | re.I)
         if m:
-            return m.group(1)
+            return m.group(2)
 
         return None
 

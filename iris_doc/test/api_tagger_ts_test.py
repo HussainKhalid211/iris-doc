@@ -332,6 +332,10 @@ export enum AudioRecordingQualityType {
 function greeter(fn: (a: string) => void) {
   fn("Hello, World");
 }
+
+export function createAgoraRtcEngine(): IRtcEngine {
+  return instance;
+}
         """)
         file.flush()
         file.close()
@@ -341,6 +345,11 @@ function greeter(fn: (a: string) => void) {
 /* api_greeter */
 function greeter(fn: (a: string) => void) {
   fn("Hello, World");
+}
+
+/* api_createagorartcengine */
+export function createAgoraRtcEngine(): IRtcEngine {
+  return instance;
 }
         """
         processedContent = self.__fileSystem.readtext(path)
