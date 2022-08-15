@@ -38,6 +38,15 @@ class TestLanguageSpecificationModule(unittest.TestCase):
         ],
         "returns": "",
         "is_hide": false
+    },
+    {
+        "id": "class_rtcengineconfig_ng",
+        "name": "RtcEngineContext",
+        "description": "Definition of RtcEngineContext.",
+        "parameters": [
+        ],
+        "returns": "",
+        "is_hide": false
     }
 ]
         """)
@@ -57,10 +66,11 @@ class TestLanguageSpecificationModule(unittest.TestCase):
 
         commentSources = module.getAllCommentSources()
 
-        self.assertEqual(len(commentSources.keys()), 2)
+        self.assertEqual(len(commentSources.keys()), 3)
         self.assertIn(
             "class_rtcengineeventhandler_onfirstremotevideoframe", commentSources.keys())
         self.assertIn("class_rtcengineeventhandler", commentSources.keys())
+        self.assertIn("class_rtcenginecontext", commentSources.keys())
 
 
 if __name__ == '__main__':

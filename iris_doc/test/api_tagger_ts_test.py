@@ -288,7 +288,6 @@ export class livestreamadvancedfeature3 {
 }
         """
         processedContent = self.__fileSystem.readtext(path)
-        print(f'result\n{processedContent}')
         self.assertEqual(processedContent, expectedContent)
 
     def test_matchEnum(self):

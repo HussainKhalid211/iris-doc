@@ -4,6 +4,7 @@ import re
 from fs.base import FS
 from typing import Dict, List, Tuple
 
+
 class Structure:
     @classmethod
     def from_json(cls, data):
@@ -12,6 +13,7 @@ class Structure:
     @classmethod
     def from_yaml(cls, data):
         return cls(**data)
+
 
 class ErrorType(IntEnum):
     Ok = 0
@@ -161,6 +163,8 @@ class LanguageSpecificationModule:
                     (e for e in elementsCopy if e['id'] == f"{tmpType}_{newName1}"), None)
                 if parentElement:
                     newName1 = parentElement['name'].lower()
+                else:
+                    newName1 = element['name'].lower()
 
                 if self.__config.isCallback2api and newType == "callback":
                     newType = "api"

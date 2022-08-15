@@ -69,9 +69,9 @@ def __processExportFile(
         processedCode = tag2Doc.process(code)
 
         if isForceMarkNoDoc:
-            postPhase = TagToNoDocPostPhase(
+            noDocPostPhase = TagToNoDocPostPhase(
                 tag2Doc=tag2Doc, format=format, code=processedCode)
-            processedCode = postPhase.run()
+            processedCode = noDocPostPhase.run()
 
         backupFile = fileSystem.open(backupFilePath, mode="w")
         backupFile.write(processedCode)
