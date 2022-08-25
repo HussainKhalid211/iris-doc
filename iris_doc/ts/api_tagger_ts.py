@@ -49,7 +49,6 @@ class TSSyntaxMatcher(LanguageSyntaxMatcher):
         return None
 
     def matchEnumValue(self, line: str) -> str:
-        print(line)
         m = re.match(r'([A-Za-z0-9_]+) = (.*),?$', line.strip())
         if m:
             return m.group(1)

@@ -136,19 +136,6 @@ class LanguageSpecificationModule:
 
             id_split = id_.split('_')
 
-            type_ = id_split[0]
-            if type_ == 'api' or type_ == 'callback':
-                id_split.pop()
-                if len(id_split) == 1:
-                    if type_ == 'api':
-                        if name_.endswith('ex'):
-                            id_split.append('irtcengineex')
-                        else:
-                            id_split.append('irtcengine')
-                    elif type_ == 'callback':
-                        id_split.append('irtcengineeventhandler')
-                id_split.append(name_)
-
             new_id = '_'.join(id_split)
 
             if self.__config.idPatternV2:

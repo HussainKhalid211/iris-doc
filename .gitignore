@@ -4,3 +4,4 @@ draft/
 __pycache__/
 output/
 **/**.DS_Store
+iris_doc/build/

@@ -314,7 +314,9 @@ class DefaultLineScanner(LineScanner):
                 # ```
                 # so we need to find upon current line to get the correct insert index
                 j = i
-                while j - 1 >= classScopeStartIndex + 1 and self.__fileLines[j - 1].strip() != "" and not self.__syntaxMatcher.matchMemberVariable(self.__fileLines[j - 1].strip()):
+                while j - 1 >= classScopeStartIndex + 1 and self.__fileLines[j - 1].strip() != "" and \
+                    not self.__syntaxMatcher.matchMemberVariable(self.__fileLines[j - 1].strip()) and \
+                    not self.__syntaxMatcher.matchAnnotation(self.__fileLines[j - 1].strip()):
                     j -= 1
                 tokens.append(self._createToken(
                     offset=j,
@@ -519,14 +521,7 @@ class ApiTagger:
         self._fileSystem = fileSystem
         self._tagBuilder = tagBuilder
 
-    # def process(self, filePaths: List[str]) -> None:
-    #     for filePath in filePaths:
-    #         self.process(filePath)
-
     def process(self, filePath: str) -> None:
-        # backupFilePath = filePath + ".backup"
-        # copy_file(self._fileSystem, filePath, self._fileSystem, backupFilePath)
-
         file = self._fileSystem.open(filePath)
 
         outputFileLines = self._tagBuilder.build(

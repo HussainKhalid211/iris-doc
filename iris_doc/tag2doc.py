@@ -6,9 +6,6 @@ from enum import IntEnum
 from iris_doc.language_specification import CommentSource, ErrorType, LanguageFormat
 
 
-
-
-
 class Tag2Doc:
 
     __format: LanguageFormat

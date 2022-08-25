@@ -663,6 +663,55 @@ class Tag2DocTest(unittest.TestCase):
 """
         self.assertEquals(result, expectedResult.rstrip().lstrip('\n'))
 
+    def test_addCommentToTopLevelFuntion(self):
+        format: LanguageFormat = LanguageFormat(
+            comment1="",
+            comment2="///",
+            comment3="",
+            summary1="",
+            summary2="",
+            tag1="",
+            tag2="",
+            param1="*[",
+            param2="] ",
+            param3="",
+            return1="",
+            return2="",
+            link1="",
+            link2="",
+            ignore="")
+        commentSource = CommentSource(
+            type_="api",
+            id="api_createagorartcengine",
+            name="createAgoraRtcEngine",
+            description="Adjusts the volume of the media file for publishing.\nAfter connected to the Agora server, you can call this method to adjust the volume of the media file heard by the remote user.",
+            parameters=[
+                {"volume": "The volume, which ranges from 0 to 400:\n 0: Mute.\n 100: (Default) The original volume.\n 400: Four times the original volume (amplifying the audio signals by four times)."}],
+            returns="",
+            deprecated="",
+            note="",
+            warning="",
+            is_hide=False)
+        commentSources: Dict[str, CommentSource] = {
+            "api_createagorartcengine": commentSource}
+        code = """
+  /* api_createagorartcengine */
+  RtcEngine createAgoraRtcEngine();
+"""
+        result = Tag2Doc(format, commentSources).process(
+            code.rstrip().lstrip('\n'))
+        expectedResult = """
+  /// Adjusts the volume of the media file for publishing.
+  /// After connected to the Agora server, you can call this method to adjust the volume of the media file heard by the remote user.
+  ///
+  /// *[volume] The volume, which ranges from 0 to 400:
+  ///  0: Mute.
+  ///  100: (Default) The original volume.
+  ///  400: Four times the original volume (amplifying the audio signals by four times).
+  RtcEngine createAgoraRtcEngine();
+"""
+        self.assertEquals(result, expectedResult.rstrip().lstrip('\n'))
+
 
 if __name__ == '__main__':
     unittest.main()

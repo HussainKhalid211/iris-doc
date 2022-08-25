@@ -21,7 +21,7 @@ class TestApiTaggerDart(unittest.TestCase):
 
     def test_matchMemberFunction(self):
         path = "member_function.dart"
-        
+
         self.__fileSystem.create(path, wipe=True)
         file = self.__fileSystem.open(path, mode="w")
         file.write("""
@@ -46,7 +46,7 @@ class MemberFunction {
         expectedContent = """
 /* class_memberfunction */
 class MemberFunction {
-/* api_memberfunction_tojson */
+/// @nodoc
     Map<String, dynamic> toJson() => _$DirectCdnStreamingMediaOptionsToJson(this);
 
 /* api_memberfunction_soloooooooooooongfunction */
@@ -68,7 +68,7 @@ class MemberFunction {
 
     def test_matchMemberFunctionWithBody(self):
         path = "member_function.dart"
-        
+
         self.__fileSystem.create(path, wipe=True)
         file = self.__fileSystem.open(path, mode="w")
         file.write("""
@@ -127,7 +127,7 @@ class MemberFunction {
 
     def test_matchFunctionMemberVariable(self):
         path = "function_member_variable.dart"
-        
+
         self.__fileSystem.create(path, wipe=True)
         file = self.__fileSystem.open(path, mode="w")
         file.write("""
@@ -153,7 +153,7 @@ class FunctionMemberVariable {
 
     def test_matchFunctionMemberVariableWithSoManyLines(self):
         path = "function_member_variable.dart"
-        
+
         self.__fileSystem.create(path, wipe=True)
         file = self.__fileSystem.open(path, mode="w")
         file.write("""
@@ -196,7 +196,7 @@ class FunctionMemberVariable {
 
     def test_matchFunctionMemberVariablesAndMemberFunctions(self):
         path = "function_member_variables_and_member_functions.dart"
-        
+
         self.__fileSystem.create(path, wipe=True)
         file = self.__fileSystem.open(path, mode="w")
         file.write("""
@@ -227,7 +227,7 @@ class FunctionMemberVariable {
 
     def test_matchMultiFunctionMemberVariablesAndMemberFunctions(self):
         path = "function_member_variables_and_member_functions.dart"
-        
+
         self.__fileSystem.create(path, wipe=True)
         file = self.__fileSystem.open(path, mode="w")
         file.write("""
@@ -275,7 +275,7 @@ class FunctionMemberVariable2 {
 
     def test_matchClass(self):
         path = "match_cass.dart"
-        
+
         self.__fileSystem.create(path, wipe=True)
         file = self.__fileSystem.open(path, mode="w")
         file.write("""
@@ -331,7 +331,7 @@ abstract class AbstractClass {
 
     def test_matchClassWithComment(self):
         path = "match_cass.dart"
-        
+
         self.__fileSystem.create(path, wipe=True)
         file = self.__fileSystem.open(path, mode="w")
         file.write("""
@@ -395,7 +395,7 @@ abstract class AbstractClass {
 
     def test_matchClassWithAnnotations(self):
         path = "match_cass.dart"
-        
+
         self.__fileSystem.create(path, wipe=True)
         file = self.__fileSystem.open(path, mode="w")
         file.write("""
@@ -466,7 +466,7 @@ class AudioOptionsExternal {
 
     def test_matchClassMultiClasses(self):
         path = "match_cass.dart"
-        
+
         self.__fileSystem.create(path, wipe=True)
         file = self.__fileSystem.open(path, mode="w")
         file.write("""
@@ -570,7 +570,7 @@ class AudioOptionsExternal2 {
 
     def test_matchNonConstConstructor(self):
         path = "match_cass.dart"
-        
+
         self.__fileSystem.create(path, wipe=True)
         file = self.__fileSystem.open(path, mode="w")
         file.write("""
@@ -625,7 +625,7 @@ class VideoViewController
 
     def test_matchEnum(self):
         path = "match_cass.dart"
-        
+
         self.__fileSystem.create(path, wipe=True)
         file = self.__fileSystem.open(path, mode="w")
         file.write("""
@@ -667,7 +667,7 @@ enum BackgroundSourceType {
 
     def test_matchTopLevelFunction(self):
         path = "match_cass.dart"
-        
+
         self.__fileSystem.create(path, wipe=True)
         file = self.__fileSystem.open(path, mode="w")
         file.write("""
@@ -690,7 +690,7 @@ RtcEngine createAgoraRtcEngine() {
 
     def test_matchTopLevelConstant(self):
         path = "match_cass.dart"
-        
+
         self.__fileSystem.create(path, wipe=True)
         file = self.__fileSystem.open(path, mode="w")
         file.write("""
@@ -714,7 +714,7 @@ const stringConst2 = "const string";
 
     def test_matchExtension(self):
         path = "match_cass.dart"
-        
+
         self.__fileSystem.create(path, wipe=True)
         file = self.__fileSystem.open(path, mode="w")
         file.write("""
@@ -732,7 +732,7 @@ extension RtcEngineExt on RtcEngine {
         self.__apiTagger.process(path)
 
         expectedContent = """
-/* class_rtcengineext */
+/// @nodoc
 extension RtcEngineExt on RtcEngine {
 /* api_rtcengineext_getassetabsolutepath */
   Future<String?> getAssetAbsolutePath(String assetPath) async {
@@ -748,7 +748,7 @@ extension RtcEngineExt on RtcEngine {
 
     def test_matchConstructor(self):
         path = "match_cass.dart"
-        
+
         self.__fileSystem.create(path, wipe=True)
         file = self.__fileSystem.open(path, mode="w")
         file.write("""
@@ -768,8 +768,43 @@ class Size {
 /* construct_size_size */
   const Size({this.width, this.height});
 
-/* construct_size_fromjson */
+/// @nodoc
   factory Size.fromJson(Map<String, dynamic> json) => _$SizeFromJson(json);
+}
+        """
+        processedContent = self.__fileSystem.readtext(path)
+        self.assertEqual(processedContent, expectedContent)
+
+    def test_tagOnAnnotation(self):
+        path = "match_cass.dart"
+
+        self.__fileSystem.create(path, wipe=True)
+        file = self.__fileSystem.open(path, mode="w")
+        file.write("""
+class Size {
+  @override
+  final VideoCanvas canvas;
+
+  @protected
+  void ss() {
+
+  }
+}
+        """)
+        file.flush()
+        file.close()
+        self.__apiTagger.process(path)
+
+        expectedContent = """
+/* class_size */
+class Size {
+  @override
+  final VideoCanvas canvas;
+
+  @protected
+  void ss() {
+
+  }
 }
         """
         processedContent = self.__fileSystem.readtext(path)
