@@ -756,6 +756,20 @@ class Size {
   const Size({this.width, this.height});
 
   factory Size.fromJson(Map<String, dynamic> json) => _$SizeFromJson(json);
+
+  factory Size(
+          {required RtcEngine rtcEngine,
+          required VideoCanvas canvas,
+          RtcConnection? connection,
+          bool useFlutterTexture = false,
+          bool useAndroidSurfaceView = false}) =>
+      MediaPlayerControllerImpl(
+        rtcEngine,
+        canvas,
+        connection,
+        useFlutterTexture,
+        useAndroidSurfaceView,
+      );
 }
         """)
         file.flush()
@@ -770,6 +784,21 @@ class Size {
 
 /// @nodoc
   factory Size.fromJson(Map<String, dynamic> json) => _$SizeFromJson(json);
+
+/* construct_size_size */
+  factory Size(
+          {required RtcEngine rtcEngine,
+          required VideoCanvas canvas,
+          RtcConnection? connection,
+          bool useFlutterTexture = false,
+          bool useAndroidSurfaceView = false}) =>
+      MediaPlayerControllerImpl(
+        rtcEngine,
+        canvas,
+        connection,
+        useFlutterTexture,
+        useAndroidSurfaceView,
+      );
 }
         """
         processedContent = self.__fileSystem.readtext(path)

@@ -160,7 +160,7 @@ class LanguageSpecificationModule:
                     newType = "class"
 
                 if len(new_id_split) == 3:
-                    newName2 = new_id_split[2]
+                    newName2 = name_
                     new_id = f"{newType}_{newName1}_{newName2}"
                 else:
                     new_id = f"{newType}_{newName1}"

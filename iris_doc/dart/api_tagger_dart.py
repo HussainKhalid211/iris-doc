@@ -31,11 +31,17 @@ class DartSyntaxMatcher(LanguageSyntaxMatcher):
         if m:
             return m.group(2)
 
-        # factory constructor
+        # factory constructor with .
         m = re.match(
             r'factory ' + className + r'\.([A-Za-z\<\>0-9_]+)\((.*)?', line.strip(), re.M | re.I)
         if m:
             return m.group(1)
+
+        # factory constructor
+        m = re.match(
+            r'factory ' + className + r'\((.*)?', line.strip(), re.M | re.I)
+        if m:
+            return className
 
         return None
 

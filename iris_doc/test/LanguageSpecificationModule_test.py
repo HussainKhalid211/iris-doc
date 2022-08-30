@@ -31,7 +31,7 @@ class TestLanguageSpecificationModule(unittest.TestCase):
         "is_hide": false
     },
     {
-        "id": "callback_onfirstremotevideoframe",
+        "id": "callback_irtcengineeventhandler_onfirstremotevideoframe",
         "name": "onFirstRemoteVideoFrame",
         "description": "Occurs when the renderer receives the first frame of the remote video.",
         "parameters": [
