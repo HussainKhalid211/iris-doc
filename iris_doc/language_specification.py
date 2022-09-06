@@ -128,8 +128,13 @@ class LanguageSpecificationModule:
 
         elementsCopy = json.loads(self.__template_doc)
         for element in json.loads(self.__template_doc):
-            id_ = element['id']
-            name_ = element['name'].lower()
+            id_: str = element['id']
+            name_: str = element['name'].lower()
+
+            tmpSource = CommentSource.from_json(json.dumps(element))
+
+            if tmpSource.is_hide is not True and name_.endswith(']') and name_.find("[") != -1:
+                name_ = name_[:name_.index("[")].rstrip()
 
             if id_.endswith('_ng'):
                 id_ = re.sub(r'_ng$', '', id_)
@@ -170,7 +175,8 @@ class LanguageSpecificationModule:
             element['type_'] = new_id[: new_id.find('_')]
 
             self.__commentSources[element['id']] = CommentSource.from_json(
-                json.dumps(element))
+                    json.dumps(element))
+
 
         return ErrorType.Ok
 

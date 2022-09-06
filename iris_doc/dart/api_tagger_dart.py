@@ -153,9 +153,6 @@ class DartToken(Token):
                     self._name1.lower().endswith("ext") and (self._name2.lower() == "value" or self._name2.lower() == "fromvalue"):
                 return "/// @nodoc"
 
-        if type == "extension":
-            type = "class"
-
         return super()._buildTag(type=type, name1=self._name1, name2=self._name2)
 
 
