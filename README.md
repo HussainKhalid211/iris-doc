@@ -1,5 +1,5 @@
 # iris_doc
-A tool that add the API tag above the APIs base on the formatted code.
+A CLI tool that fill the dita json data as comments to code from https://github.com/AgoraIO/agora_doc_source.
 
 ## Get Started
 ```
