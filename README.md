@@ -11,3 +11,6 @@ python3 iris_doc.py \
         --template-url=https://github.com/AgoraIO/agora_doc_source/releases/download/main/flutter_ng_json_template_cn.json \
         --export-file-path=/Users/exportfile/path/export_file.dart
 ```
+
+## License
+The project is under the MIT license.
