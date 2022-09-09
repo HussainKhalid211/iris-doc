@@ -7,7 +7,7 @@ import yaml
 from iris_doc.language_specification import ErrorType, LanguageFormat
 
 
-class ConfigurationReadVerificationModule:
+class ConfigurationReader:
     __fmt = LanguageFormat()
     __fileSystem: FS
 

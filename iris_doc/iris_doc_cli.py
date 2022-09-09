@@ -5,7 +5,7 @@ import argparse
 from typing import Any, Dict, List
 
 from xmlrpc.client import Boolean
-from iris_doc.ConfigurationReadVerificationModule import ConfigurationReadVerificationModule
+from iris_doc.configuration_reader import ConfigurationReader
 from iris_doc.api_tagger import ApiTagger, TagBuilder
 from iris_doc.dart.export_file_parser_dart import ExportFileParserDart
 from iris_doc.dart.api_tagger_dart import DartTagBuilder
@@ -167,7 +167,7 @@ def run():
         isCallback2api=isCallback2api,
         idPatternV2=idPatternV2)
 
-    config = ConfigurationReadVerificationModule(fileSystem)
+    config = ConfigurationReader(fileSystem)
     config.set_config(args.config)
     format = config.get_fmt()[1]
 
