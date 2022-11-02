@@ -27,6 +27,8 @@ from fs.permissions import Permissions
 
 import requests
 
+from iris_doc.ts.post_phase_ts import PostPhaseTS
+
 
 class TagToNoDocPostPhase(PostPhase):
 
@@ -154,7 +156,8 @@ def run():
         isCallback2api = True
         exportFileParser = ExportFileParserTS(fileSystem=fileSystem)
         tagBuilder = TSTagBuilder()
-        postPhase = DefaultPostPhase()
+        exportFileDir = os.path.dirname(exportFilePath)
+        postPhase = PostPhaseTS(exportFileDir)
     else:
         isCallback2class = False
         isCallback2api = False

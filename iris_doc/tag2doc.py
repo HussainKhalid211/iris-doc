@@ -82,7 +82,7 @@ class Tag2Doc:
             outList: List[str] = []
             for parameter in comment_source.parameters:
                 for key in parameter:
-                    outList.append(generate((key, parameter[key])))
+                    outList.append(generate((key.rstrip("\n"), parameter[key])))
 
             return '\n'.join(outList)
 
