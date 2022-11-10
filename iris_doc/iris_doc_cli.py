@@ -116,6 +116,7 @@ def run():
     isCallback2api: Boolean
     idPatternV2 = True
     exportFilePath = args.export_file_path
+    exportFilePath = os.path.realpath(exportFilePath)
     isForceMarkNoDoc = not args.debug_show_tag
     templateFile = args.template
     templateUrls = args.template_urls
