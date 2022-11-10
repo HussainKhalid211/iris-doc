@@ -103,8 +103,8 @@ def run():
                         help='The path of the `fmt.json` file')
     parser.add_argument('--template', '-t', type=str,
                         help='The path of the doc json file')
-    parser.add_argument('--template-url', type=str,
-                        help='The github release url of the template file')
+    parser.add_argument('--template-urls', type=str,
+                        help='The github release url of the template file, use \';\' to split the url, the json will be merge in file order')
     parser.add_argument('--language', choices=['dart', 'ts', 'c#'])
     parser.add_argument('--debug-show-tag', default=False, action='store_true',
                         help='Whether change the dita id type from callback to api')
@@ -118,8 +118,7 @@ def run():
     exportFilePath = args.export_file_path
     isForceMarkNoDoc = not args.debug_show_tag
     templateFile = args.template
-    templateUrl = args.template_url
-    actualTemplateFile = templateFile
+    templateUrls = args.template_urls
 
     tagBuilder: TagBuilder
     exportFileParser: ExportFileParser
@@ -132,16 +131,6 @@ def run():
 
     fileSystem.makedirs(buildDirPath, Permissions(
         user='rwx', group='rwx', other='rwx'))
-
-    if actualTemplateFile is None and templateUrl is not None:
-        data = requests.get(templateUrl)
-
-        templateFileName = os.path.basename(os.path.normpath(templateUrl))
-
-        # Save file data to local copy
-        with fileSystem.open(os.path.join(buildDirPath, templateFileName), 'wb') as file:
-            file.write(data.content)
-            actualTemplateFile = os.path.join(buildDirPath, templateFileName)
 
     lang = args.language
     if lang == "dart":
@@ -177,7 +166,21 @@ def run():
     module = LanguageSpecificationModule(
         fileSystem=fileSystem, config=languageSpecificationConfig)
     module.setLanguageSpecificationConfig(languageSpecificationConfig)
-    module.read_template_file(actualTemplateFile)
+
+    if templateFile is None and templateUrls is not None:
+        templateUrlList = templateUrls.split(';')
+        for templateUrl in templateUrlList:
+            data = requests.get(templateUrl)
+
+            templateFileName = os.path.basename(os.path.normpath(templateUrl))
+
+            # Save file data to local copy
+            with fileSystem.open(os.path.join(buildDirPath, templateFileName), 'wb') as file:
+                file.write(data.content)
+                module.addTemplateFilePath(os.path.join(buildDirPath, templateFileName))
+    else:
+        module.addTemplateFilePath(templateFile)
+
     module.deserialize()
 
     __processExportFile(tagBuilder=tagBuilder,

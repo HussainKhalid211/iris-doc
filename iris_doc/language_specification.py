@@ -93,28 +93,17 @@ class LanguageSpecificationConfig:
 
 
 class LanguageSpecificationModule:
-    __template_doc = ''
     __fileSystem: FS
     __config: LanguageSpecificationConfig
     __commentSources: Dict[str, CommentSource] = {}
+    __templateFilePaths: List[str] = []
 
     def __init__(self, fileSystem: FS, config: LanguageSpecificationConfig) -> None:
         self.__fileSystem = fileSystem
         self.__config = config
 
-    def read_template_file(self, path: str) -> ErrorType:
-        if not isinstance(path, str):
-            return ErrorType.TypeError
-
-        try:
-            file = self.__fileSystem.open(path)
-            self.__template_doc = file.read()
-            self.__template_doc = re.sub(' {3,}', '', self.__template_doc)
-            file.close()
-        except FileNotFoundError:
-            return ErrorType.FileNotFoundError
-
-        return ErrorType.Ok
+    def addTemplateFilePath(self, path: str):
+        self.__templateFilePaths.append(path)
 
     def setLanguageSpecificationConfig(self, config: LanguageSpecificationConfig):
         self.__config = config
@@ -122,13 +111,11 @@ class LanguageSpecificationModule:
     def specialize(self) -> bool:
         pass
 
-    def deserialize(self) -> ErrorType:
-        if self.__template_doc == '':
-            return ErrorType.FileNotReadError
-
-        elementsCopy = json.loads(self.__template_doc)
-        for element in json.loads(self.__template_doc):
+    def __parseJson(self, jsonContent: str):
+        elementsCopy = json.loads(jsonContent)
+        for element in json.loads(jsonContent):
             id_: str = element['id']
+
             name_: str = element['name'].lower()
 
             tmpSource = CommentSource.from_json(json.dumps(element))
@@ -174,9 +161,17 @@ class LanguageSpecificationModule:
 
             element['type_'] = new_id[: new_id.find('_')]
 
-            self.__commentSources[element['id']] = CommentSource.from_json(
-                    json.dumps(element))
+            if element['id'] in self.__commentSources:
+                continue
 
+            self.__commentSources[element['id']] = CommentSource.from_json(
+                json.dumps(element))
+
+    def deserialize(self) -> ErrorType:
+        for path in self.__templateFilePaths:
+            with self.__fileSystem.open(path, 'r') as file:
+                jsonContent = file.read()
+                self.__parseJson(jsonContent)
 
         return ErrorType.Ok
 
