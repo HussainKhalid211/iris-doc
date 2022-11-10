@@ -103,8 +103,8 @@ def run():
                         help='The path of the `fmt.json` file')
     parser.add_argument('--template', '-t', type=str,
                         help='The path of the doc json file')
-    parser.add_argument('--template-urls', type=str,
-                        help='The github release url of the template file, use \';\' to split the url, the json will be merge in file order')
+    parser.add_argument('--template-url', type=str, action='append',
+                        help='The github release url of the template file, which allow set multiple times, the json will be merge in file order')
     parser.add_argument('--language', choices=['dart', 'ts', 'c#'])
     parser.add_argument('--debug-show-tag', default=False, action='store_true',
                         help='Whether change the dita id type from callback to api')
@@ -119,7 +119,7 @@ def run():
     exportFilePath = os.path.realpath(exportFilePath)
     isForceMarkNoDoc = not args.debug_show_tag
     templateFile = args.template
-    templateUrls = args.template_urls
+    templateUrls = args.template_url
 
     tagBuilder: TagBuilder
     exportFileParser: ExportFileParser
@@ -169,8 +169,7 @@ def run():
     module.setLanguageSpecificationConfig(languageSpecificationConfig)
 
     if templateFile is None and templateUrls is not None:
-        templateUrlList = templateUrls.split(';')
-        for templateUrl in templateUrlList:
+        for templateUrl in templateUrls:
             data = requests.get(templateUrl)
 
             templateFileName = os.path.basename(os.path.normpath(templateUrl))
@@ -178,7 +177,8 @@ def run():
             # Save file data to local copy
             with fileSystem.open(os.path.join(buildDirPath, templateFileName), 'wb') as file:
                 file.write(data.content)
-                module.addTemplateFilePath(os.path.join(buildDirPath, templateFileName))
+                module.addTemplateFilePath(
+                    os.path.join(buildDirPath, templateFileName))
     else:
         module.addTemplateFilePath(templateFile)
 
