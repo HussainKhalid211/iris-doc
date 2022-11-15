@@ -155,7 +155,8 @@ class Tag2Doc:
             parentCommentSource = self.__commentSources[parentTag]
             for param in parentCommentSource.parameters:
                 for pk in param:
-                    if pk.lower() == tagSpilt[2].lower():
+                    # process special tag like `class_virtualbackgroundsource_blur_degree`
+                    if pk.lower() == '_'.join(tagSpilt[2:]).lower():
                         return CommentSource(id=tag,
                                              description=param[pk],
                                              is_hide=parentCommentSource.is_hide)

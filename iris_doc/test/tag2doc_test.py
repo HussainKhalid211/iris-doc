@@ -614,6 +614,118 @@ class GenerateCommentSmokeTest(unittest.TestCase):
 
 
 class Tag2DocTest(unittest.TestCase):
+    def test_paramWithoutUnderscore(self):
+        format: LanguageFormat = LanguageFormat(
+            comment1="/**",
+            comment2=" *",
+            comment3=" */",
+            summary1="",
+            summary2="",
+            tag1="",
+            tag2="",
+            param1="*[",
+            param2="] ",
+            param3="",
+            return1="",
+            return2="",
+            link1="",
+            link2="",
+            ignore="")
+        commentSource = CommentSource(
+            type_="class",
+            id="class_virtualbackgroundsource",
+            name="VirtualBackgroundSource",
+            description="The custom background image.\n",
+            parameters=[
+                {
+                    "blurDegree": "The degree of blurring applied to the custom background image. This parameter takes effect only when the type of the custom background image is BackgroundBlur."
+                }],
+            returns="",
+            deprecated="",
+            note="",
+            warning="",
+            is_hide=False)
+        commentSources: Dict[str, CommentSource] = {
+            "class_virtualbackgroundsource": commentSource}
+        code = """
+  /* class_virtualbackgroundsource */
+  export class VirtualBackgroundSource {
+    /* class_virtualbackgroundsource_blurDegree */
+    blurDegree?: BackgroundBlurDegree;
+  }
+"""
+        result = Tag2Doc(format, commentSources).process(
+            code.rstrip().lstrip('\n'))
+        expectedResult = """
+  /**
+   * The custom background image.
+   *
+   */
+  export class VirtualBackgroundSource {
+    /**
+     * The degree of blurring applied to the custom background image. This parameter takes effect only when the type of the custom background image is BackgroundBlur.
+     */
+    blurDegree?: BackgroundBlurDegree;
+  }
+"""
+        self.assertEquals(result, expectedResult.rstrip().lstrip('\n'))
+
+    def test_paramWithUnderscore(self):
+        format: LanguageFormat = LanguageFormat(
+            comment1="/**",
+            comment2=" *",
+            comment3=" */",
+            summary1="",
+            summary2="",
+            tag1="",
+            tag2="",
+            param1="*[",
+            param2="] ",
+            param3="",
+            return1="",
+            return2="",
+            link1="",
+            link2="",
+            ignore="")
+        commentSource = CommentSource(
+            type_="class",
+            id="class_virtualbackgroundsource",
+            name="VirtualBackgroundSource",
+            description="The custom background image.\n",
+            parameters=[
+                {
+                    "blur_degree": "The degree of blurring applied to the custom background image. This parameter takes effect only when the type of the custom background image is BackgroundBlur."
+                }],
+            returns="",
+            deprecated="",
+            note="",
+            warning="",
+            is_hide=False)
+        commentSources: Dict[str, CommentSource] = {
+            "class_virtualbackgroundsource": commentSource}
+        code = """
+  /* class_virtualbackgroundsource */
+  export class VirtualBackgroundSource {
+    /* class_virtualbackgroundsource_blur_degree */
+    blur_degree?: BackgroundBlurDegree;
+  }
+"""
+        result = Tag2Doc(format, commentSources).process(
+            code.rstrip().lstrip('\n'))
+        expectedResult = """
+  /**
+   * The custom background image.
+   *
+   */
+  export class VirtualBackgroundSource {
+    /**
+     * The degree of blurring applied to the custom background image. This parameter takes effect only when the type of the custom background image is BackgroundBlur.
+     */
+    blur_degree?: BackgroundBlurDegree;
+  }
+"""
+        self.assertEquals(result, expectedResult.rstrip().lstrip('\n'))
+
     def test_addCommentToCode(self):
         format: LanguageFormat = LanguageFormat(
             comment1="",

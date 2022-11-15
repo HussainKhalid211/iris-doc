@@ -115,6 +115,7 @@ class MemberFunction {
         file.write("""
 class MemberVariableAndFunctions {
   stopMicrophoneRecording?: boolean;
+  stop_microphone_recording?: boolean;
 
   abstract release(sync?: boolean): void;
 }
@@ -128,6 +129,8 @@ class MemberVariableAndFunctions {
 class MemberVariableAndFunctions {
 /* class_membervariableandfunctions_stopmicrophonerecording */
   stopMicrophoneRecording?: boolean;
+/* class_membervariableandfunctions_stop_microphone_recording */
+  stop_microphone_recording?: boolean;
 
 /* api_membervariableandfunctions_release */
   abstract release(sync?: boolean): void;
@@ -359,7 +362,7 @@ export function createAgoraRtcEngine(): IRtcEngine {
         self.__fileSystem.create(path, wipe=True)
         file = self.__fileSystem.open(path, mode="w")
         file.write("""
-const AgoraRtcSurfaceView = requireNativeComponent<{ callApi: object }>(
+export const AgoraRtcSurfaceView = requireNativeComponent<{ callApi: object }>(
   'AgoraRtcSurfaceView'
 );
         """)
@@ -369,7 +372,7 @@ const AgoraRtcSurfaceView = requireNativeComponent<{ callApi: object }>(
 
         expectedContent = """
 /* constant_agorartcsurfaceview */
-const AgoraRtcSurfaceView = requireNativeComponent<{ callApi: object }>(
+export const AgoraRtcSurfaceView = requireNativeComponent<{ callApi: object }>(
   'AgoraRtcSurfaceView'
 );
         """

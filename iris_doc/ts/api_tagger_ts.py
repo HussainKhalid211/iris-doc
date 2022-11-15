@@ -12,9 +12,9 @@ class TSSyntaxMatcher(LanguageSyntaxMatcher):
 
     def matchClass(self, line: str) -> str:
         m = re.match(
-            r'(export )?(abstract )?class ([A-Za-z\<\>0-9_]+)(.*){?$', line.strip())
+            r'(export )?(abstract )?(class|interface) ([A-Za-z\<\>0-9_]+)(.*){?$', line.strip())
         if m:
-            return m.group(3)
+            return m.group(4)
 
         return None
 
@@ -35,7 +35,7 @@ class TSSyntaxMatcher(LanguageSyntaxMatcher):
         return None
 
     def matchMemberVariable(self, line: str) -> str:
-        m = re.match(r'([A-Za-z0-9_]+)\?\: (.*);', line.strip())
+        m = re.match(r'([A-Za-z0-9_]+)(\?)?\: (.*);', line.strip())
         if m:
             return m.group(1)
 
@@ -67,15 +67,15 @@ class TSSyntaxMatcher(LanguageSyntaxMatcher):
 
     def matchConstant(self, line: str) -> str:
         m = re.match(
-            r'const (.*)(\: )?(.*) = (.*)', line.strip(), re.M | re.I)
+            r'(export )?const (.*)(\: )?(.*) = (.*)', line.strip(), re.M | re.I)
         if m:
-            return m.group(1)
+            return m.group(2)
 
         return None
 
     def matchFunction(self, line: str) -> str:
         m = re.match(
-            r'(export\s)?function ([A-Za-z0-9_]+)\((.*)(\)?( {)?|;?)$', line.strip(), re.M | re.I)
+            r'(export )?function ([A-Za-z0-9_]+)\((.*)(\)?( {)?|;?)$', line.strip(), re.M | re.I)
         if m:
             return m.group(2)
 
