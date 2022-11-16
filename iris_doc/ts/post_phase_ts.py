@@ -13,6 +13,10 @@ class PostPhaseTS(PostPhase):
 
     def run(self) -> Any:
         p = subprocess.Popen(
-            ["yarn", "run", "eslint", "--ext", ".js,.ts,.tsx", ".", "--fix"],
+            ["yarn"],
+            cwd=self.__executePath)
+        p.wait()
+        p = subprocess.Popen(
+            ["yarn", "eslint", "--ext", ".js,.ts,.tsx", ".", "--fix"],
             cwd=self.__executePath)
         p.wait()
