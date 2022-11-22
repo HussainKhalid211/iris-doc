@@ -5,6 +5,10 @@ import argparse
 from typing import Any, Dict, List
 
 from xmlrpc.client import Boolean
+
+from iris_doc.c_sharp.api_tagger_c_sharp import CSharpTagBuilder
+from iris_doc.c_sharp.export_file_parser_c_sharp import ExportFileParserCSharp
+from iris_doc.c_sharp.post_phase_c_sharp import PostPhaseCSharp
 from iris_doc.configuration_reader import ConfigurationReader
 from iris_doc.api_tagger import ApiTagger, TagBuilder
 from iris_doc.dart.export_file_parser_dart import ExportFileParserDart
@@ -105,7 +109,7 @@ def run():
                         help='The path of the doc json file')
     parser.add_argument('--template-url', type=str, action='append',
                         help='The github release url of the template file, which allow set multiple times, the json will be merge in file order')
-    parser.add_argument('--language', choices=['dart', 'ts', 'c#'])
+    parser.add_argument('--language', choices=['dart', 'ts', 'c_sharp'])
     parser.add_argument('--debug-show-tag', default=False, action='store_true',
                         help='Whether change the dita id type from callback to api')
     parser.add_argument('--export-file-path', type=str,
@@ -148,6 +152,13 @@ def run():
         tagBuilder = TSTagBuilder()
         exportFileDir = os.path.dirname(exportFilePath)
         postPhase = PostPhaseTS(exportFileDir)
+    elif lang == "c_sharp":
+        isCallback2class = False
+        isCallback2api = True
+        exportFileParser = ExportFileParserCSharp(fileSystem=fileSystem)
+        tagBuilder = CSharpTagBuilder()
+        exportFileDir = os.path.dirname(exportFilePath)
+        postPhase = PostPhaseCSharp(exportFileDir)
     else:
         isCallback2class = False
         isCallback2api = False

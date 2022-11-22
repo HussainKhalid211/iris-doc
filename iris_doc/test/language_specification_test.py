@@ -9,15 +9,15 @@ class TestLanguageSpecificationModule(unittest.TestCase):
     __fileSystem: fs.memoryfs.MemoryFS
 
     @classmethod
-    def setUpClass(self):
-        self.__fileSystem = fs.memoryfs.MemoryFS()
+    def setUp(cls):
+        cls.__fileSystem = fs.memoryfs.MemoryFS()
 
     @classmethod
-    def tearDownClass(self):
-        self.__fileSystem.close()
+    def tearDown(cls):
+        cls.__fileSystem.close()
 
     def testMatchTagPatternV2(self):
-        path = "template.json"
+        path = "testMatchTagPatternV2.json"
         self.__fileSystem.create(path, wipe=True)
         file = self.__fileSystem.open(path, mode="w")
         file.write("""
@@ -72,7 +72,7 @@ class TestLanguageSpecificationModule(unittest.TestCase):
         self.assertIn("class_rtcenginecontext", commentSources.keys())
 
     def testMultipleTemplateFile(self):
-        path = "template.json"
+        path = "testMultipleTemplateFile1.json"
         self.__fileSystem.create(path, wipe=True)
         file = self.__fileSystem.open(path, mode="w")
         file.write("""
@@ -108,7 +108,7 @@ class TestLanguageSpecificationModule(unittest.TestCase):
         file.flush()
         file.close()
 
-        path2 = "template.json"
+        path2 = "testMultipleTemplateFile2.json"
         self.__fileSystem.create(path2, wipe=True)
         file2 = self.__fileSystem.open(path2, mode="w")
         file2.write("""
@@ -163,10 +163,66 @@ class TestLanguageSpecificationModule(unittest.TestCase):
         self.assertIn("class_rtcengineeventhandler", commentSources.keys())
 
         comment: CommentSource = commentSources['class_rtcengineeventhandler']
-        self.assertEqual(comment.description, 'The SDK uses the RtcEngineEventHandler interface')
+        self.assertEqual(comment.description,
+                         'The SDK uses the RtcEngineEventHandler interface')
 
         self.assertIn("class_rtcenginecontext", commentSources.keys())
         self.assertIn("class_rtmconfig", commentSources.keys())
+
+    def testClassWithParameters(self):
+        path = "testClassWithParameters.json"
+        self.__fileSystem.create(path, wipe=True)
+        file = self.__fileSystem.open(path, mode="w")
+        file.write("""
+[
+    {
+        "id": "class_irtcengineeventhandler",
+        "name": "RtcEngineEventHandler",
+        "description": "The SDK uses the RtcEngineEventHandler interface",
+        "parameters": [
+            {
+                "param1": "value1"
+            },
+            {
+                "param2": "value2"
+            }
+        ],
+        "returns": "",
+        "is_hide": false
+    }
+]
+        """)
+        file.flush()
+        file.close()
+
+        languageSpecificationConfig: LanguageSpecificationConfig = LanguageSpecificationConfig(
+            isCallback2class=True,
+            isCallback2api=False,
+            idPatternV2=True)
+
+        module = LanguageSpecificationModule(
+            self.__fileSystem, languageSpecificationConfig)
+        module.addTemplateFilePath(path)
+        module.deserialize()
+
+        commentSources = module.getAllCommentSources()
+
+        self.assertEqual(len(commentSources.keys()), 3)
+        self.assertIn(
+            "class_rtcengineeventhandler", commentSources.keys())
+        self.assertIn("class_rtcengineeventhandler_param1",
+                      commentSources.keys())
+        self.assertEqual(
+            commentSources["class_rtcengineeventhandler_param1"].name, "param1")
+        self.assertEqual(
+            commentSources["class_rtcengineeventhandler_param1"].description, "value1")
+
+        self.assertIn("class_rtcengineeventhandler_param2",
+                      commentSources.keys())
+        self.assertEqual(
+            commentSources["class_rtcengineeventhandler_param2"].name, "param2")
+        self.assertEqual(
+            commentSources["class_rtcengineeventhandler_param2"].description, "value2")
 
 
 if __name__ == '__main__':

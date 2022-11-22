@@ -29,5 +29,18 @@ python3 iris_doc.py \
         --export-file-path=/Users/exportfile/path/export_file.ts
 ```
 
+### c_sharp
+First install the clang
+
+```
+python3 -m pip install -r requirements.txt
+
+python3 iris_doc.py \
+        --config=fmt_config/fmt_c_sharp.yaml \
+        --language=c_sharp \
+        --template-url=https://github.com/AgoraIO/agora_doc_source/releases/download/main/unity_ng_doc_template_en.json \
+        --export-file-path=/Users/exportfile/path
+```
+
 ## License
 The project is under the MIT license.

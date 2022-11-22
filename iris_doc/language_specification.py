@@ -101,6 +101,8 @@ class LanguageSpecificationModule:
     def __init__(self, fileSystem: FS, config: LanguageSpecificationConfig) -> None:
         self.__fileSystem = fileSystem
         self.__config = config
+        self.__commentSources.clear()
+        self.__templateFilePaths.clear()
 
     def addTemplateFilePath(self, path: str):
         self.__templateFilePaths.append(path)
@@ -164,8 +166,21 @@ class LanguageSpecificationModule:
             if element['id'] in self.__commentSources:
                 continue
 
-            self.__commentSources[element['id']] = CommentSource.from_json(
+            finalCommentSource: CommentSource = CommentSource.from_json(
                 json.dumps(element))
+            parent_parameters = finalCommentSource.parameters
+            finalCommentSource.parameters = []
+            self.__commentSources[element['id']] = finalCommentSource
+
+            if (element['type_'] == "class" or element['type_'] == "enum") and len(parent_parameters) > 0:
+                for parameters in parent_parameters:
+                    for parameterk in parameters:
+                        parameterId = f'{finalCommentSource.id}_{parameterk.lower()}'
+                        self.__commentSources[parameterId] = CommentSource(
+                            id=parameterId,
+                            name=parameterk,
+                            description=parameters[parameterk],
+                            is_hide=finalCommentSource.is_hide)
 
     def deserialize(self) -> ErrorType:
         for path in self.__templateFilePaths:

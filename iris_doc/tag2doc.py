@@ -82,7 +82,8 @@ class Tag2Doc:
             outList: List[str] = []
             for parameter in comment_source.parameters:
                 for key in parameter:
-                    outList.append(generate((key.rstrip("\n"), parameter[key])))
+                    outList.append(
+                        generate((key.rstrip("\n"), parameter[key])))
 
             return '\n'.join(outList)
 
@@ -117,7 +118,7 @@ class Tag2Doc:
         out += self.__generateSummary(format, comment_source, str_indent)
 
         # Only the type with "api", or not the parent object
-        if comment_source.type_ == 'api' or len(comment_source.id.split("_")) > 2:
+        if comment_source.type_ == 'api' or (comment_source.parameters is not None and 0 < len(comment_source.parameters)):
             if paramStr := self.__generateParam(format, comment_source, str_indent):
                 out += "\n\n"
                 out += paramStr
@@ -144,22 +145,6 @@ class Tag2Doc:
     def __getCommentSource(self, tag: str) -> CommentSource:
         if tag in self.__commentSources.keys():
             return self.__commentSources[tag]
-
-        tagSpilt = tag.split('_')
-        # The length of the tag spilt should be 3 for the member variable or enum value
-        if len(tagSpilt) < 3:
-            return None
-
-        parentTag = f"{tagSpilt[0]}_{tagSpilt[1]}"
-        if parentTag in self.__commentSources.keys():
-            parentCommentSource = self.__commentSources[parentTag]
-            for param in parentCommentSource.parameters:
-                for pk in param:
-                    # process special tag like `class_virtualbackgroundsource_blur_degree`
-                    if pk.lower() == '_'.join(tagSpilt[2:]).lower():
-                        return CommentSource(id=tag,
-                                             description=param[pk],
-                                             is_hide=parentCommentSource.is_hide)
 
         return None
 
