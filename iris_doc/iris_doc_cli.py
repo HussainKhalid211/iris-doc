@@ -136,6 +136,7 @@ def run():
     isForceMarkNoDoc = not args.debug_show_tag
     templateFile = args.template
     templateUrls = args.template_url
+    configPath = args.config
 
     tagBuilder: TagBuilder
     exportFileParser: ExportFileParser
@@ -200,6 +201,7 @@ def run():
         templateFilePathList.append(templateFile)
 
     _processExportFile(languageSpecificationConfig=languageSpecificationConfig,
+                       configPath=configPath,
                        tagBuilder=tagBuilder,
                        exportFileParser=exportFileParser,
                        postPhase=postPhase,
