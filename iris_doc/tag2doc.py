@@ -1,13 +1,10 @@
 import re
 from typing import Dict, List, Tuple, Optional
-from fs.base import FS
-from enum import IntEnum
 
 from iris_doc.language_specification import CommentSource, ErrorType, LanguageFormat
 
 
 class Tag2Doc:
-
     __format: LanguageFormat
     __commentSources: Dict[str, CommentSource]
 
@@ -118,7 +115,8 @@ class Tag2Doc:
         out += self.__generateSummary(format, comment_source, str_indent)
 
         # Only the type with "api", or not the parent object
-        if comment_source.type_ == 'api' or (comment_source.parameters is not None and 0 < len(comment_source.parameters)):
+        if comment_source.type_ == 'api' or (
+                comment_source.parameters is not None and 0 < len(comment_source.parameters)):
             if paramStr := self.__generateParam(format, comment_source, str_indent):
                 out += "\n\n"
                 out += paramStr
@@ -149,16 +147,24 @@ class Tag2Doc:
         if "##" in tag:
             tag_parameters = tag.split("##")[1]
             tag_parameters_list = tag_parameters.split("#")
-            tag_parameters_list.sort()
+            sort_tag_parameters_list = tag_parameters_list.copy()
+            sort_tag_parameters_list.sort()
             for csk in self.__commentSources.keys():
                 if "##" in csk:
                     parameters = csk.split("##")[1]
                     parameters_list = parameters.split("#")
-                    parameters_list.sort()
-
-                    if tag_parameters_list == parameters_list:
+                    sort_parameters_list = parameters_list.copy()
+                    sort_parameters_list.sort()
+                    if sort_tag_parameters_list == sort_parameters_list:
+                        parameters = []
+                        for it in tag_parameters_list:
+                            if self.__commentSources[csk].parameters:
+                                for param in self.__commentSources[csk].parameters:
+                                    if list(param.keys())[0].lower() == it:
+                                        parameters.append(param)
+                        self.__commentSources[csk].parameters = parameters
                         return self.__commentSources[csk]
-                
+
         return None
 
     def process(self, code: str) -> str:

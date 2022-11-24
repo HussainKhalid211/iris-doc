@@ -271,8 +271,8 @@ public abstract class IRtcEngine
 /// Enables or disables the dual-stream mode on the sender and sets the low-quality video stream.
 /// </summary>
 ///
-/// <param name="streamConfig">The configuration of the low-quality video stream. See SimulcastStreamConfig .</param>
 /// <param name="enabled">Whether to enable dual-stream mode:true: Enable dual-stream mode.false: (Default) Disable dual-stream mode.</param>
+/// <param name="streamConfig">The configuration of the low-quality video stream. See SimulcastStreamConfig .</param>
     public abstract int EnableDualStreamMode(bool enabled, SimulcastStreamConfig streamConfig);
 }
         """

@@ -275,13 +275,13 @@ class RtcEngine {
 /**
  * Enables or disables the dual-stream mode on the sender and sets the low-quality video stream.
  *
- * @param streamConfig The configuration of the low-quality video stream. See SimulcastStreamConfig .
  * @param enabled Whether to enable dual-stream mode:true: Enable dual-stream mode.false: (Default) Disable dual-stream mode.
+ * @param streamConfig The configuration of the low-quality video stream. See SimulcastStreamConfig .
  */
   abstract enableDualStreamMode(enabled: boolean, streamConfig?: SimulcastStreamConfig);
 }
         """
-        self.assertEqual(result, expected_content)
+        self.assertEqual(expected_content, result)
 
 
 if __name__ == '__main__':

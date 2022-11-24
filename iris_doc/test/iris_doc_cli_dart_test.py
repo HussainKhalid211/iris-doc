@@ -263,8 +263,8 @@ class RtcEngine {
 class RtcEngine {
 /// Enables or disables the dual-stream mode on the sender and sets the low-quality video stream.
 ///
-/// * [streamConfig] The configuration of the low-quality video stream. See SimulcastStreamConfig .
 /// * [enabled] Whether to enable dual-stream mode:true: Enable dual-stream mode.false: (Default) Disable dual-stream mode.
+/// * [streamConfig] The configuration of the low-quality video stream. See SimulcastStreamConfig .
   Future<void> enableDualStreamMode(
       {required bool enabled, SimulcastStreamConfig? streamConfig});
 }

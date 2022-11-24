@@ -1,6 +1,6 @@
-from typing import Dict
 import unittest
-from iris_doc.dart.api_tagger_dart import DartTagBuilder
+from typing import Dict
+
 from iris_doc.language_specification import CommentSource, LanguageFormat
 from iris_doc.tag2doc import Tag2Doc
 
@@ -47,7 +47,7 @@ class CommentGroup(unittest.TestCase):
   /// ### Return
   /// This is return
 """
-        self.assertEquals(result, expectedResult.rstrip().lstrip('\n'))
+        self.assertEqual(result, expectedResult.rstrip().lstrip('\n'))
 
     def test_comment1_comment2(self):
         format: LanguageFormat = LanguageFormat(
@@ -91,7 +91,7 @@ class CommentGroup(unittest.TestCase):
   /// ### Return
   /// This is return
 """
-        self.assertEquals(result, expectedResult.rstrip().lstrip('\n'))
+        self.assertEqual(result, expectedResult.rstrip().lstrip('\n'))
 
     def test_comment1_comment2_comment3(self):
         format: LanguageFormat = LanguageFormat(
@@ -136,7 +136,7 @@ class CommentGroup(unittest.TestCase):
   /// This is return
   ///
 """
-        self.assertEquals(result, expectedResult.rstrip().lstrip('\n'))
+        self.assertEqual(result, expectedResult.rstrip().lstrip('\n'))
 
 
 class SummaryGroup(unittest.TestCase):
@@ -182,7 +182,7 @@ class SummaryGroup(unittest.TestCase):
   /// ### Return
   /// This is return
 """
-        self.assertEquals(result, expectedResult.rstrip().lstrip('\n'))
+        self.assertEqual(result, expectedResult.rstrip().lstrip('\n'))
 
     def test_summary1_summary2(self):
         format: LanguageFormat = LanguageFormat(
@@ -227,7 +227,7 @@ class SummaryGroup(unittest.TestCase):
   /// ### Return
   /// This is return
 """
-        self.assertEquals(result, expectedResult.rstrip().lstrip('\n'))
+        self.assertEqual(result, expectedResult.rstrip().lstrip('\n'))
 
 
 class ParamGroup(unittest.TestCase):
@@ -272,7 +272,7 @@ class ParamGroup(unittest.TestCase):
   /// ### Return
   /// This is return
 """
-        self.assertEquals(result, expectedResult.rstrip().lstrip('\n'))
+        self.assertEqual(result, expectedResult.rstrip().lstrip('\n'))
 
     def test_param1_param2(self):
         format: LanguageFormat = LanguageFormat(
@@ -315,7 +315,7 @@ class ParamGroup(unittest.TestCase):
   /// ### Return
   /// This is return
 """
-        self.assertEquals(result, expectedResult.rstrip().lstrip('\n'))
+        self.assertEqual(result, expectedResult.rstrip().lstrip('\n'))
 
     def test_param1_param2_param3(self):
         format: LanguageFormat = LanguageFormat(
@@ -358,7 +358,7 @@ class ParamGroup(unittest.TestCase):
   /// ### Return
   /// This is return
 """
-        self.assertEquals(result, expectedResult.rstrip().lstrip('\n'))
+        self.assertEqual(result, expectedResult.rstrip().lstrip('\n'))
 
 
 class ReturnGroup(unittest.TestCase):
@@ -403,7 +403,7 @@ class ReturnGroup(unittest.TestCase):
   /// <returns>
   /// This is return
 """
-        self.assertEquals(result, expectedResult.rstrip().lstrip('\n'))
+        self.assertEqual(result, expectedResult.rstrip().lstrip('\n'))
 
     def test_return1_return2(self):
         format: LanguageFormat = LanguageFormat(
@@ -446,7 +446,7 @@ class ReturnGroup(unittest.TestCase):
   /// This is return
   /// </returns>
 """
-        self.assertEquals(result, expectedResult.rstrip().lstrip('\n'))
+        self.assertEqual(result, expectedResult.rstrip().lstrip('\n'))
 
 
 class GenerateCommentSmokeTest(unittest.TestCase):
@@ -473,7 +473,8 @@ class GenerateCommentSmokeTest(unittest.TestCase):
             name="adjustPublishSignalVolume",
             description="Adjusts the volume of the media file for publishing.\nAfter connected to the Agora server, you can call this method to adjust the volume of the media file heard by the remote user.",
             parameters=[
-                {"volume": "The volume, which ranges from 0 to 400:\n 0: Mute.\n 100: (Default) The original volume.\n 400: Four times the original volume (amplifying the audio signals by four times).\n "}],
+                {
+                    "volume": "The volume, which ranges from 0 to 400:\n 0: Mute.\n 100: (Default) The original volume.\n 400: Four times the original volume (amplifying the audio signals by four times).\n "}],
             returns="",
             deprecated="",
             note="",
@@ -492,7 +493,7 @@ class GenerateCommentSmokeTest(unittest.TestCase):
   ///  100: (Default) The original volume.
   ///  400: Four times the original volume (amplifying the audio signals by four times).
   /// """
-        self.assertEquals(result, expectedResult.lstrip('\n'))
+        self.assertEqual(result, expectedResult.lstrip('\n'))
 
     def test_noParamHasReturn(self):
         format: LanguageFormat = LanguageFormat(
@@ -534,7 +535,7 @@ class GenerateCommentSmokeTest(unittest.TestCase):
   /// This is return
   /// </returns>
 """
-        self.assertEquals(result, expectedResult.rstrip().lstrip('\n'))
+        self.assertEqual(result, expectedResult.rstrip().lstrip('\n'))
 
     def test_isHide(self):
         format: LanguageFormat = LanguageFormat(
@@ -572,7 +573,7 @@ class GenerateCommentSmokeTest(unittest.TestCase):
         expectedResult = """
   /// @nodoc
 """
-        self.assertEquals(result, expectedResult.rstrip().lstrip('\n'))
+        self.assertEqual(result, expectedResult.rstrip().lstrip('\n'))
 
     def test_badCommentSource(self):
         format: LanguageFormat = LanguageFormat(
@@ -610,7 +611,7 @@ class GenerateCommentSmokeTest(unittest.TestCase):
         expectedResult = """
   /// @nodoc
 """
-        self.assertEquals(result, expectedResult.rstrip().lstrip('\n'))
+        self.assertEqual(result, expectedResult.rstrip().lstrip('\n'))
 
 
 class Tag2DocTest(unittest.TestCase):
@@ -678,7 +679,7 @@ class Tag2DocTest(unittest.TestCase):
         BLUR_DEGREE?: BackgroundBlurDegree;
       }
     """
-        self.assertEquals(result, expectedResult.rstrip().lstrip('\n'))
+        self.assertEqual(result, expectedResult.rstrip().lstrip('\n'))
 
     def test_paramWithoutUnderscore(self):
         format: LanguageFormat = LanguageFormat(
@@ -742,7 +743,7 @@ class Tag2DocTest(unittest.TestCase):
     blurDegree?: BackgroundBlurDegree;
   }
 """
-        self.assertEquals(result, expectedResult.rstrip().lstrip('\n'))
+        self.assertEqual(result, expectedResult.rstrip().lstrip('\n'))
 
     def test_paramWithUnderscore(self):
         format: LanguageFormat = LanguageFormat(
@@ -807,7 +808,7 @@ class Tag2DocTest(unittest.TestCase):
     blur_degree?: BackgroundBlurDegree;
   }
 """
-        self.assertEquals(result, expectedResult.rstrip().lstrip('\n'))
+        self.assertEqual(result, expectedResult.rstrip().lstrip('\n'))
 
     def test_addCommentToCode(self):
         format: LanguageFormat = LanguageFormat(
@@ -832,7 +833,8 @@ class Tag2DocTest(unittest.TestCase):
             name="adjustPublishSignalVolume",
             description="Adjusts the volume of the media file for publishing.\nAfter connected to the Agora server, you can call this method to adjust the volume of the media file heard by the remote user.",
             parameters=[
-                {"volume": "The volume, which ranges from 0 to 400:\n 0: Mute.\n 100: (Default) The original volume.\n 400: Four times the original volume (amplifying the audio signals by four times)."}],
+                {
+                    "volume": "The volume, which ranges from 0 to 400:\n 0: Mute.\n 100: (Default) The original volume.\n 400: Four times the original volume (amplifying the audio signals by four times)."}],
             returns="",
             deprecated="",
             note="",
@@ -856,7 +858,7 @@ class Tag2DocTest(unittest.TestCase):
   ///  400: Four times the original volume (amplifying the audio signals by four times).
   Future<void> adjustPublishSignalVolume(int volume);
 """
-        self.assertEquals(result, expectedResult.rstrip().lstrip('\n'))
+        self.assertEqual(result, expectedResult.rstrip().lstrip('\n'))
 
     def test_addCommentToTopLevelFuntion(self):
         format: LanguageFormat = LanguageFormat(
@@ -881,7 +883,8 @@ class Tag2DocTest(unittest.TestCase):
             name="createAgoraRtcEngine",
             description="Adjusts the volume of the media file for publishing.\nAfter connected to the Agora server, you can call this method to adjust the volume of the media file heard by the remote user.",
             parameters=[
-                {"volume": "The volume, which ranges from 0 to 400:\n 0: Mute.\n 100: (Default) The original volume.\n 400: Four times the original volume (amplifying the audio signals by four times)."}],
+                {
+                    "volume": "The volume, which ranges from 0 to 400:\n 0: Mute.\n 100: (Default) The original volume.\n 400: Four times the original volume (amplifying the audio signals by four times)."}],
             returns="",
             deprecated="",
             note="",
@@ -905,7 +908,7 @@ class Tag2DocTest(unittest.TestCase):
   ///  400: Four times the original volume (amplifying the audio signals by four times).
   RtcEngine createAgoraRtcEngine();
 """
-        self.assertEquals(result, expectedResult.rstrip().lstrip('\n'))
+        self.assertEqual(result, expectedResult.rstrip().lstrip('\n'))
 
 
 if __name__ == '__main__':
