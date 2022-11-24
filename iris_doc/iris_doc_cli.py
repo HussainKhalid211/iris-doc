@@ -59,15 +59,27 @@ class TagToNoDocPostPhase(PostPhase):
         return '\n'.join(newCodeLines)
 
 
-def __processExportFile(
+def _processExportFile(
+        languageSpecificationConfig: LanguageSpecificationConfig,
+        configPath: str,
         tagBuilder: TagBuilder,
         exportFileParser: ExportFileParser,
         postPhase: PostPhase,
         exportFilePath: str,
+        templateFilePathList: List[str],
         fileSystem: FS,
-        format: LanguageFormat,
-        commentSources: Dict[str, CommentSource],
         isForceMarkNoDoc: bool):
+    config = ConfigurationReader(fileSystem)
+    config.set_config(configPath)
+    format = config.get_fmt()[1]
+
+    module = LanguageSpecificationModule(
+        fileSystem=fileSystem, config=languageSpecificationConfig)
+    module.setLanguageSpecificationConfig(languageSpecificationConfig)
+    for p in templateFilePathList:
+        module.addTemplateFilePath(p)
+    module.deserialize()
+
     exportFiles = exportFileParser.parseExportFiles(exportFilePath)
     for path in exportFiles:
         backupFilePath = path + ".backup"
@@ -77,7 +89,7 @@ def __processExportFile(
 
         code = fileSystem.readtext(backupFilePath)
         tag2Doc = Tag2Doc(
-            format=format, commentSources=commentSources)
+            format=format, commentSources=module.getAllCommentSources())
         processedCode = tag2Doc.process(code)
 
         if isForceMarkNoDoc:
@@ -171,13 +183,8 @@ def run():
         isCallback2api=isCallback2api,
         idPatternV2=idPatternV2)
 
-    config = ConfigurationReader(fileSystem)
-    config.set_config(args.config)
-    format = config.get_fmt()[1]
 
-    module = LanguageSpecificationModule(
-        fileSystem=fileSystem, config=languageSpecificationConfig)
-    module.setLanguageSpecificationConfig(languageSpecificationConfig)
+    templateFilePathList: List[str] = []
 
     if templateFile is None and templateUrls is not None:
         for templateUrl in templateUrls:
@@ -188,20 +195,17 @@ def run():
             # Save file data to local copy
             with fileSystem.open(os.path.join(buildDirPath, templateFileName), 'wb') as file:
                 file.write(data.content)
-                module.addTemplateFilePath(
-                    os.path.join(buildDirPath, templateFileName))
+                templateFilePathList.append(os.path.join(buildDirPath, templateFileName))
     else:
-        module.addTemplateFilePath(templateFile)
+        templateFilePathList.append(templateFile)
 
-    module.deserialize()
-
-    __processExportFile(tagBuilder=tagBuilder,
-                        exportFileParser=exportFileParser,
-                        postPhase=postPhase,
-                        exportFilePath=exportFilePath,
-                        fileSystem=fileSystem,
-                        format=format,
-                        commentSources=module.getAllCommentSources(),
-                        isForceMarkNoDoc=isForceMarkNoDoc)
+    _processExportFile(languageSpecificationConfig=languageSpecificationConfig,
+                       tagBuilder=tagBuilder,
+                       exportFileParser=exportFileParser,
+                       postPhase=postPhase,
+                       exportFilePath=exportFilePath,
+                       templateFilePathList=templateFilePathList,
+                       fileSystem=fileSystem,
+                       isForceMarkNoDoc=isForceMarkNoDoc)
 
     fileSystem.close()

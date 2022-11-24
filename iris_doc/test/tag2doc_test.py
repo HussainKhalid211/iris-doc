@@ -828,7 +828,7 @@ class Tag2DocTest(unittest.TestCase):
             ignore="")
         commentSource = CommentSource(
             type_="api",
-            id="api_imediaplayer_adjustpublishsignalvolume",
+            id="api_imediaplayer_adjustpublishsignalvolume##volume",
             name="adjustPublishSignalVolume",
             description="Adjusts the volume of the media file for publishing.\nAfter connected to the Agora server, you can call this method to adjust the volume of the media file heard by the remote user.",
             parameters=[
@@ -839,9 +839,9 @@ class Tag2DocTest(unittest.TestCase):
             warning="",
             is_hide=False)
         commentSources: Dict[str, CommentSource] = {
-            "api_imediaplayer_adjustpublishsignalvolume": commentSource}
+            "api_imediaplayer_adjustpublishsignalvolume##volume": commentSource}
         code = """
-  /* api_imediaplayer_adjustpublishsignalvolume */
+  /* api_imediaplayer_adjustpublishsignalvolume##volume */
   Future<void> adjustPublishSignalVolume(int volume);
 """
         result = Tag2Doc(format, commentSources).process(

@@ -128,6 +128,26 @@ class DartSyntaxMatcher(LanguageSyntaxMatcher):
     def matchClassScopeEnd(self, line: str) -> bool:
         return line.strip().startswith("}")
 
+    def findFunctionParameterList(self, function_name: str, line: str) -> List[str]:
+        parameterList: List[str] = []
+        m = re.match(
+            r'(.*)' + function_name + r'\(\{?([0-9a-zA-Z,=.?\s]*)\}?\)(.*)', line.strip())
+        if m:
+            parameterBlock = m.group(2).lstrip('{').rstrip('}')
+            parameterBlockSplit = parameterBlock.split(',')
+            for parameter in parameterBlockSplit:
+                # Split default value =
+                # e.g., MediaSourceType type = MediaSourceType.primaryCameraSource
+                if "=" in parameter:
+                    p = parameter.split(' = ')[0].split(' ')[-1]
+                    if p:
+                        parameterList.append(p)
+                else:
+                    p = parameter.split(' ')[-1]
+                    if p:
+                        parameterList.append(p)
+
+        return parameterList
 
 class DartToken(Token):
 

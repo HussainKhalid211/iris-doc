@@ -1,5 +1,5 @@
 import re
-from typing import Dict, List, Tuple
+from typing import Dict, List, Tuple, Optional
 from fs.base import FS
 from enum import IntEnum
 
@@ -142,10 +142,23 @@ class Tag2Doc:
             "\n",
             self.__generateDescription(format, out, str_indent))
 
-    def __getCommentSource(self, tag: str) -> CommentSource:
+    def __getCommentSource(self, tag: str) -> Optional[CommentSource]:
         if tag in self.__commentSources.keys():
             return self.__commentSources[tag]
 
+        if "##" in tag:
+            tag_parameters = tag.split("##")[1]
+            tag_parameters_list = tag_parameters.split("#")
+            tag_parameters_list.sort()
+            for csk in self.__commentSources.keys():
+                if "##" in csk:
+                    parameters = csk.split("##")[1]
+                    parameters_list = parameters.split("#")
+                    parameters_list.sort()
+
+                    if tag_parameters_list == parameters_list:
+                        return self.__commentSources[csk]
+                
         return None
 
     def process(self, code: str) -> str:

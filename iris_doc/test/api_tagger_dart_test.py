@@ -53,10 +53,10 @@ class MemberFunction {
     Map<String, dynamic> soLoooooooooooongFunction() => 
         _$DirectCdnStreamingMediaOptionsToJson(this);
 
-/* api_memberfunction_setvideoencoderconfiguration */
+/* api_memberfunction_setvideoencoderconfiguration##config */
     Future<void> setVideoEncoderConfiguration(VideoEncoderConfiguration config);
 
-/* api_memberfunction_setbeautyeffectoptions */
+/* api_memberfunction_setbeautyeffectoptions##enabled#options#type */
     Future<void> setBeautyEffectOptions(
       {required bool enabled,
       required BeautyOptions options,
@@ -100,7 +100,7 @@ class MemberFunction {
         expectedContent = """
 /* class_memberfunction */
 class MemberFunction {
-/* api_memberfunction_getassetabsolutepath */
+/* api_memberfunction_getassetabsolutepath##assetpath */
     Future<String?> getAssetAbsolutePath(String assetPath) async {
         final impl = this as RtcEngineImpl;
         final p = await impl.engineMethodChannel
@@ -108,7 +108,7 @@ class MemberFunction {
         return p;
     }
 
-/* api_memberfunction_create */
+/* api_memberfunction_create##rtcengine#canvas#usefluttertexture#useandroidsurfaceview */
     static Future<MediaPlayerController> create(
         {required RtcEngine rtcEngine,
         required VideoCanvas canvas,
@@ -734,7 +734,7 @@ extension RtcEngineExt on RtcEngine {
         expectedContent = """
 /// @nodoc
 extension RtcEngineExt on RtcEngine {
-/* api_rtcengineext_getassetabsolutepath */
+/* api_rtcengineext_getassetabsolutepath##assetpath */
   Future<String?> getAssetAbsolutePath(String assetPath) async {
     final impl = this as RtcEngineImpl;
     final p = await impl.engineMethodChannel

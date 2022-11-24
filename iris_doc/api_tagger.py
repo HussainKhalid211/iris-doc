@@ -1,9 +1,9 @@
 
 import re
-from typing import List, Tuple
-from fs.copy import copy_file
-from fs.base import FS
 from abc import ABC, abstractmethod
+from typing import List, Tuple
+
+from fs.base import FS
 
 TYPE_CLASS = "class"
 TYPE_API = "api"
@@ -126,6 +126,25 @@ class LanguageSyntaxMatcher(ABC):
         Whether match the functioin scope end
         """
         return self.matchClassScopeEnd(line)
+
+    def matchFunctioinParameterScopeStart(self, functionName: str, line: str) -> bool:
+        """
+        Whether match the functioin parameter scope start
+        """
+        return "(" in line
+
+    def matchFunctioinParameterScopeEnd(self, line: str) -> bool:
+        """
+        Whether match the functioin parameter scope end
+        """
+        return ")" in line
+
+    @abstractmethod
+    def findFunctionParameterList(self, function_name: str, line: str) -> List[str]:
+        """
+        Find the functioin parameters as List
+        """
+        pass
 
     def matchEnumScopeStart(self, line: str) -> bool:
         """
@@ -342,6 +361,36 @@ class DefaultLineScanner(LineScanner):
 
         return (classScopeEndIndex, tokens)
 
+    def _getFunctionParameterList(self,    
+                                  functionName: str,
+                                  startIndex: int,
+                                  endIndex: int) -> List[str]:
+        parameterList: List[str] = []
+
+        index = startIndex
+        parameterScopeStartIndex = index
+        parameterScopeEndIndex = endIndex
+        while index < endIndex:
+            line = self.__fileLines[index]
+
+            if self.__syntaxMatcher.matchFunctioinParameterScopeStart(functionName, line):
+                parameterScopeStartIndex = index
+
+            if self.__syntaxMatcher.matchFunctioinParameterScopeEnd(line):
+                parameterScopeEndIndex = index
+
+            if parameterScopeStartIndex == parameterScopeEndIndex:
+                break
+
+            index += 1
+
+        parameterBlockLine = "".join(map(lambda x: x.strip(), self.__fileLines[parameterScopeStartIndex:parameterScopeEndIndex + 1]))
+
+        parameterList = self.__syntaxMatcher.findFunctionParameterList(functionName, parameterBlockLine)
+
+        return parameterList
+
+
     def _getFunctionTokens(self,
                            className: str,
                            functionName: str,
@@ -350,22 +399,36 @@ class DefaultLineScanner(LineScanner):
                            classScopeEndIndex: int) -> Tuple[int, List[Token]]:
         tokens: List[Token] = []
 
+        functionScopeStartIndex = self._findFunctionScopeStartIndex(
+            self.__fileLines, lineIndex)
+
+        start_index = lineIndex
+        end_index = classScopeEndIndex if functionScopeStartIndex == -1 else functionScopeStartIndex
+
+        parameterList = self._getFunctionParameterList(
+            functionName=functionName, 
+            startIndex=start_index,
+            endIndex=end_index)
+
+        # function1##param1#param2#param3
+        functionSignature=functionName
+
+        if len(parameterList) > 0:
+            functionSignature=f'{functionSignature}##{"#".join(parameterList)}'
+
         token: Token
         if className:
             token = self._createToken(
                 offset=lineIndex,
                 type=TYPE_API,
                 name1=className,
-                name2=functionName,
+                name2=functionSignature,
                 annotations=self._getAnnotations(lineIndex))
         else:
             token = self._createToken(
                 offset=lineIndex, type=TYPE_API, name1=functionName, annotations=self._getAnnotations(lineIndex))
 
         tokens.append(token)
-
-        functionScopeStartIndex = self._findFunctionScopeStartIndex(
-            self.__fileLines, lineIndex)
 
         if functionScopeStartIndex != -1 and functionScopeStartIndex > classScopeStartIndex and functionScopeStartIndex < classScopeEndIndex:
             functionScopeEndIndex = self._findFunctionScopeEndIndex(

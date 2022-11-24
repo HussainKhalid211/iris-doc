@@ -81,6 +81,9 @@ class TSSyntaxMatcher(LanguageSyntaxMatcher):
 
         return None
 
+    def findFunctionParameterList(self, function_name: str, line: str) -> List[str]:
+        return []
+
     def matchClassScopeStart(self, line: str) -> bool:
         return line.strip().endswith("{")
 

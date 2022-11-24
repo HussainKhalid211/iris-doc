@@ -18,13 +18,8 @@ class ConfigurationReader:
         if not isinstance(config_path, str):
             return ErrorType.TypeError
 
-        actual_path: str
-        if os.path.isabs(config_path):
-            actual_path = config_path
-        else:
-            actual_path = os.path.join(os.getcwd(), config_path)
-
-        with self.__fileSystem.open(os.path.abspath(actual_path)) as file:
+        actual_path = config_path
+        with self.__fileSystem.open(actual_path) as file:
             configDict = yaml.safe_load(file)
 
             self.__fmt = LanguageFormat.from_yaml(configDict)

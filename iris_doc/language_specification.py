@@ -159,9 +159,18 @@ class LanguageSpecificationModule:
                 else:
                     new_id = f"{newType}_{newName1}"
 
-            element['id'] = new_id
-
             element['type_'] = new_id[: new_id.find('_')]
+
+            if element['type_'] == "api":
+                tmpCS: CommentSource = CommentSource.from_json(json.dumps(element))
+                if len(tmpCS.parameters) > 0:
+                    parameterNames: List[str] = []
+                    for parameters in tmpCS.parameters:
+                        for pk in parameters.keys():
+                            parameterNames.append(pk)
+                    new_id = f'{new_id}##{"#".join(parameterNames).lower()}'
+
+            element['id'] = new_id
 
             if element['id'] in self.__commentSources:
                 continue
@@ -169,10 +178,11 @@ class LanguageSpecificationModule:
             finalCommentSource: CommentSource = CommentSource.from_json(
                 json.dumps(element))
             parent_parameters = finalCommentSource.parameters
-            finalCommentSource.parameters = []
-            self.__commentSources[element['id']] = finalCommentSource
 
             if (element['type_'] == "class" or element['type_'] == "enum") and len(parent_parameters) > 0:
+                finalCommentSource.parameters = []
+                self.__commentSources[element['id']] = finalCommentSource
+
                 for parameters in parent_parameters:
                     for parameterk in parameters:
                         parameterId = f'{finalCommentSource.id}_{parameterk.lower()}'
@@ -181,6 +191,8 @@ class LanguageSpecificationModule:
                             name=parameterk,
                             description=parameters[parameterk],
                             is_hide=finalCommentSource.is_hide)
+            else:
+                self.__commentSources[element['id']] = finalCommentSource
 
     def deserialize(self) -> ErrorType:
         for path in self.__templateFilePaths:

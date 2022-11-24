@@ -82,6 +82,23 @@ class CSharpSyntaxMatcher(LanguageSyntaxMatcher):
 
         return None
 
+    def findFunctionParameterList(self, function_name: str, line: str) -> List[str]:
+        parameterList: List[str] = []
+        m = re.match(
+            r'(.*)' + function_name + r'\(\{?(.*)\}?\)(.*)', line.strip())
+        if m:
+            parameterBlock = m.group(2)
+            parameterBlockSplit = parameterBlock.split(',')
+            for parameter in parameterBlockSplit:
+                # Split default value =
+                # e.g., MediaSourceType type = MediaSourceType.primaryCameraSource
+                if "=" in parameter:
+                    parameterList.append(parameter.split(' = ')[0].split(' ')[-1])
+                else:
+                    parameterList.append(parameter.split(' ')[-1])
+
+        return parameterList
+
     def matchClassScopeStart(self, line: str) -> bool:
         return line.strip().endswith("{")
 

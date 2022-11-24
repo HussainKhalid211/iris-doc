@@ -56,7 +56,7 @@ namespace Agora.Rtc
 /* class_irtcengine */
     public abstract class IRtcEngine
     {
-/* api_irtcengine_setchannelprofile */
+/* api_irtcengine_setchannelprofile##profile */
       public abstract int SetChannelProfile(CHANNEL_PROFILE_TYPE profile);
 
 /* class_irtcengine_appid */
@@ -74,8 +74,6 @@ namespace Agora.Rtc
 }
         """
         processedContent = self.__fileSystem.readtext(path)
-        print("xiayangqun: " + processedContent)
-        print("xiayangqun expected: " + expectedContent)
         self.assertEqual(processedContent, expectedContent)
 
     def test_matchMemberVariables(self):
