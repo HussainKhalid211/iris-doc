@@ -43,17 +43,17 @@ export abstract class IRtcEngine {
         expectedContent = """
 /* class_irtcengine */
 export abstract class IRtcEngine {
-/* api_irtcengine_release */
+/* api_irtcengine_release##sync */
     abstract release(sync?: boolean): void;
 
-/* api_irtcengine_setbeautyeffectoptions */
+/* api_irtcengine_setbeautyeffectoptions##enabled#options#type */
     abstract setBeautyEffectOptions(
       enabled: boolean,
       options: BeautyOptions,
       type?: MediaSourceType
     ): number;
 
-/* api_irtcengine_onjoinchannelsuccess */
+/* api_irtcengine_onjoinchannelsuccess##connection#elapsed */
     onJoinChannelSuccess?(connection: RtcConnection, elapsed: number): void;
 }
         """
@@ -132,7 +132,7 @@ class MemberVariableAndFunctions {
 /* class_membervariableandfunctions_stop_microphone_recording */
   stop_microphone_recording?: boolean;
 
-/* api_membervariableandfunctions_release */
+/* api_membervariableandfunctions_release##sync */
   abstract release(sync?: boolean): void;
 }
         """

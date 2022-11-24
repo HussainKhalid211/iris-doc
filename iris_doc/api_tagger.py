@@ -378,8 +378,6 @@ class DefaultLineScanner(LineScanner):
 
             if self.__syntaxMatcher.matchFunctioinParameterScopeEnd(line):
                 parameterScopeEndIndex = index
-
-            if parameterScopeStartIndex == parameterScopeEndIndex:
                 break
 
             index += 1

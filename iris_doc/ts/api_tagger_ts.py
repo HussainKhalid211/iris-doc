@@ -12,7 +12,7 @@ class TSSyntaxMatcher(LanguageSyntaxMatcher):
 
     def matchClass(self, line: str) -> str:
         m = re.match(
-            r'(export )?(abstract )?(class|interface) ([A-Za-z\<\>0-9_]+)(.*){?$', line.strip())
+            r'(export )?(abstract )?(class|interface) ([A-Za-z<>0-9_]+)(.*){?$', line.strip())
         if m:
             return m.group(4)
 
@@ -35,7 +35,7 @@ class TSSyntaxMatcher(LanguageSyntaxMatcher):
         return None
 
     def matchMemberVariable(self, line: str) -> str:
-        m = re.match(r'([A-Za-z0-9_]+)(\?)?\: (.*);', line.strip())
+        m = re.match(r'([A-Za-z0-9_]+)(\?)?: (.*);', line.strip())
         if m:
             return m.group(1)
 
@@ -67,9 +67,9 @@ class TSSyntaxMatcher(LanguageSyntaxMatcher):
 
     def matchConstant(self, line: str) -> str:
         m = re.match(
-            r'(export )?const (.*)(\: )?(.*) = (.*)', line.strip(), re.M | re.I)
+            r'export const (.*)(: )?(.*) = (.*)', line.strip(), re.M | re.I)
         if m:
-            return m.group(2)
+            return m.group(1)
 
         return None
 
@@ -89,6 +89,25 @@ class TSSyntaxMatcher(LanguageSyntaxMatcher):
 
     def matchClassScopeEnd(self, line: str) -> bool:
         return line.strip().startswith("}")
+
+    def findFunctionParameterList(self, function_name: str, line: str) -> List[str]:
+        parameterList: List[str] = []
+        m = re.match(
+            r'(.*)' + function_name + r'\??\((.*)\)(.*)', line.strip())
+        if m:
+            parameterBlock = m.group(2)
+            parameterBlockSplit = parameterBlock.split(',')
+            for parameter in parameterBlockSplit:
+                # Split default value =
+                # e.g., MediaSourceType type = MediaSourceType.primaryCameraSource
+                if "=" in parameter:
+                    parameterList.append(parameter.split(' = ')[0].split(' ')[-1])
+                else:
+                    m = re.match(r'\s?([A-Za-z0-9_]+)\??: (.*)', parameter)
+                    if m:
+                        parameterList.append(m.group(1))
+
+        return parameterList
 
 
 # class DartToken(Token):
