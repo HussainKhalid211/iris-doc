@@ -400,6 +400,119 @@ class RtcEngineEventHandler {
         """
         self.assertEqual(result, expected_content)
 
+    def test_tag2doc_member_function_parameters_not_matched(self):
+        config_file_path = "fmt_dart.yaml"
+        self.__fileSystem.create(config_file_path, wipe=True)
+        config_file = self.__fileSystem.open(config_file_path, mode="w")
+        config_file.write("""
+comment1: ""
+comment2: "///"
+comment3: ""
+summary1: ""
+summary2: ""
+tag1: "**"
+tag2: "**"
+param1: "* ["
+param2: "] "
+param3: ""
+link1: "["
+link2: "]"
+ignore: "@nodoc"
+return1: Returns
+return2: ""
+""")
+
+        config_file.flush()
+        config_file.close()
+
+        json_file_path = "testMultipleTemplateFile1.json"
+        self.__fileSystem.create(json_file_path, wipe=True)
+        json_file = self.__fileSystem.open(json_file_path, mode="w")
+        json_file.write("""
+        [
+            {
+                "id": "class_irtcengine",
+                "name": "RtcEngine",
+                "description": "The basic interface of the Agora SDK that implements the core functions of real-time communication.",
+                "parameters": [],
+                "returns": "",
+                "is_hide": false
+            },
+            {
+                "id": "api_irtcengine_enabledualstreammode3",
+                "name": "enableDualStreamMode",
+                "description": "Enables or disables the dual-stream mode on the sender and sets the low-quality video stream.",
+                "parameters": [
+                    {
+                        "streamConfig": "The configuration of the low-quality video stream. See SimulcastStreamConfig ."
+                    }
+                ],
+                "returns": "",
+                "is_hide": false
+            },
+            {
+                "id": "api_irtcengine_destroymediaplayer",
+                "name": "destroyMediaPlayer",
+                "description": "Destroys the media player instance.",
+                "parameters": [],
+                "returns": "",
+                "is_hide": false
+            }
+        ]
+                """)
+        json_file.flush()
+        json_file.close()
+
+        dart_file_path = "member_function.dart"
+
+        self.__fileSystem.create(dart_file_path, wipe=True)
+        file = self.__fileSystem.open(dart_file_path, mode="w")
+        file.write("""
+class RtcEngine {
+  Future<void> enableDualStreamMode(
+      {required bool enabled, SimulcastStreamConfig? streamConfig});
+
+  Future<void> destroyMediaPlayer(MediaPlayer mediaPlayer);
+}
+        """)
+        file.flush()
+        file.close()
+
+        fakeExportFileParser = FakeExportFileParser([dart_file_path])
+
+        languageSpecificationConfig: LanguageSpecificationConfig = LanguageSpecificationConfig(
+            isCallback2class=True,
+            isCallback2api=False,
+            idPatternV2=True)
+
+        _processExportFile(languageSpecificationConfig=languageSpecificationConfig,
+                           configPath=config_file_path,
+                           tagBuilder=DartTagBuilder(),
+                           exportFileParser=fakeExportFileParser,
+                           postPhase=DefaultPostPhase(),
+                           exportFilePath="",
+                           templateFilePathList=[json_file_path],
+                           fileSystem=self.__fileSystem,
+                           isForceMarkNoDoc=False
+                           )
+
+        result = self.__fileSystem.readtext(dart_file_path)
+
+        expected_content = """
+/// The basic interface of the Agora SDK that implements the core functions of real-time communication.
+class RtcEngine {
+/// Enables or disables the dual-stream mode on the sender and sets the low-quality video stream.
+///
+/// * [streamConfig] The configuration of the low-quality video stream. See SimulcastStreamConfig .
+  Future<void> enableDualStreamMode(
+      {required bool enabled, SimulcastStreamConfig? streamConfig});
+
+/// Destroys the media player instance.
+  Future<void> destroyMediaPlayer(MediaPlayer mediaPlayer);
+}
+        """
+        self.assertEqual(result, expected_content)
+
 
 if __name__ == '__main__':
     unittest.main()

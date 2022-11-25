@@ -166,6 +166,17 @@ class Tag2Doc:
                         self.__commentSources[csk].parameters = parameters
                         return self.__commentSources[csk]
 
+        # Allow fallback to the match id without parameter list if the parameter list not matched
+        if "##" in tag:
+            tag_no_parameters = tag.split("##")[0]
+            for csk in self.__commentSources.keys():
+                if "##" in csk:
+                    id_no_parameters = csk.split("##")[0]
+                    if tag_no_parameters == id_no_parameters:
+                        return self.__commentSources[csk]
+                elif tag_no_parameters == csk:
+                    return self.__commentSources[csk]
+
         return None
 
     def process(self, code: str) -> str:
