@@ -37,6 +37,12 @@ class MemberFunction {
       {required bool enabled,
       required BeautyOptions options,
       MediaSourceType type = MediaSourceType.primaryCameraSource});
+
+    Future<void> setExternalVideoSource(
+      {required bool enabled,
+      required bool useTexture,
+      ExternalVideoSourceType sourceType = ExternalVideoSourceType.videoFrame,
+      SenderOptions encodedVideoOption = const SenderOptions()});
 }
         """)
         file.flush()
@@ -61,6 +67,13 @@ class MemberFunction {
       {required bool enabled,
       required BeautyOptions options,
       MediaSourceType type = MediaSourceType.primaryCameraSource});
+
+/* api_memberfunction_setexternalvideosource##enabled#usetexture#sourcetype#encodedvideooption */
+    Future<void> setExternalVideoSource(
+      {required bool enabled,
+      required bool useTexture,
+      ExternalVideoSourceType sourceType = ExternalVideoSourceType.videoFrame,
+      SenderOptions encodedVideoOption = const SenderOptions()});
 }
         """
         processedContent = self.__fileSystem.readtext(path)

@@ -131,7 +131,7 @@ class LanguageSyntaxMatcher(ABC):
         """
         Whether match the functioin parameter scope start
         """
-        return "(" in line
+        return f"{functionName}(" in line
 
     def matchFunctioinParameterScopeEnd(self, line: str) -> bool:
         """
@@ -364,7 +364,7 @@ class DefaultLineScanner(LineScanner):
     def _getFunctionParameterList(self,    
                                   functionName: str,
                                   startIndex: int,
-                                  endIndex: int) -> List[str]:
+                                  endIndex: int) -> Tuple[List[str], int, int]:
         parameterList: List[str] = []
 
         index = startIndex
@@ -386,7 +386,7 @@ class DefaultLineScanner(LineScanner):
 
         parameterList = self.__syntaxMatcher.findFunctionParameterList(functionName, parameterBlockLine)
 
-        return parameterList
+        return (parameterList, parameterScopeStartIndex, parameterScopeEndIndex)
 
 
     def _getFunctionTokens(self,
@@ -403,7 +403,7 @@ class DefaultLineScanner(LineScanner):
         start_index = lineIndex
         end_index = classScopeEndIndex if functionScopeStartIndex == -1 else functionScopeStartIndex
 
-        parameterList = self._getFunctionParameterList(
+        parameterList, parameter_scope_start, parameter_scope_end = self._getFunctionParameterList(
             functionName=functionName, 
             startIndex=start_index,
             endIndex=end_index)
@@ -433,7 +433,7 @@ class DefaultLineScanner(LineScanner):
                 self.__fileLines, functionScopeStartIndex)
             return (functionScopeEndIndex, tokens)
 
-        return (lineIndex, tokens)
+        return parameter_scope_end, tokens
 
     def _getEnumTokens(self, enumName: str, lineIndex: int) -> Tuple[int, List[Token]]:
         tokens: List[Token] = []

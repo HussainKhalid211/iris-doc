@@ -131,7 +131,7 @@ class DartSyntaxMatcher(LanguageSyntaxMatcher):
     def findFunctionParameterList(self, function_name: str, line: str) -> List[str]:
         parameterList: List[str] = []
         m = re.match(
-            r'(.*)' + function_name + r'\(\{?([0-9a-zA-Z,=<>.?\s]*)\}?\)(.*)', line.strip())
+            r'(.*)' + function_name + r'\(\{?([0-9a-zA-Z,=<>.?()\s]*)\}?\)(.*)', line.strip())
         if m:
             parameterBlock = m.group(2).lstrip('{').rstrip('}')
             parameterBlockSplit = parameterBlock.split(',')
