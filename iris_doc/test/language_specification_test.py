@@ -5,7 +5,6 @@ from iris_doc.language_specification import CommentSource, LanguageSpecification
 
 
 class TestLanguageSpecificationModule(unittest.TestCase):
-
     __fileSystem: fs.memoryfs.MemoryFS
 
     @classmethod
@@ -180,6 +179,63 @@ class TestLanguageSpecificationModule(unittest.TestCase):
         "name": "RtcEngineEventHandler",
         "description": "The SDK uses the RtcEngineEventHandler interface",
         "parameters": [
+            {
+                "param1": "value1"
+            },
+            {
+                "param2": "value2"
+            }
+        ],
+        "returns": "",
+        "is_hide": false
+    }
+]
+        """)
+        file.flush()
+        file.close()
+
+        languageSpecificationConfig: LanguageSpecificationConfig = LanguageSpecificationConfig(
+            isCallback2class=True,
+            isCallback2api=False,
+            idPatternV2=True)
+
+        module = LanguageSpecificationModule(
+            self.__fileSystem, languageSpecificationConfig)
+        module.addTemplateFilePath(path)
+        module.deserialize()
+
+        commentSources = module.getAllCommentSources()
+
+        self.assertEqual(len(commentSources.keys()), 3)
+        self.assertIn(
+            "class_rtcengineeventhandler", commentSources.keys())
+        self.assertIn("class_rtcengineeventhandler_param1",
+                      commentSources.keys())
+        self.assertEqual(
+            commentSources["class_rtcengineeventhandler_param1"].name, "param1")
+        self.assertEqual(
+            commentSources["class_rtcengineeventhandler_param1"].description, "value1")
+
+        self.assertIn("class_rtcengineeventhandler_param2",
+                      commentSources.keys())
+        self.assertEqual(
+            commentSources["class_rtcengineeventhandler_param2"].name, "param2")
+        self.assertEqual(
+            commentSources["class_rtcengineeventhandler_param2"].description, "value2")
+
+    def testClassWithEmptyParameters(self):
+        path = "testClassWithParameters.json"
+        self.__fileSystem.create(path, wipe=True)
+        file = self.__fileSystem.open(path, mode="w")
+        file.write("""
+[
+    {
+        "id": "class_irtcengineeventhandler",
+        "name": "RtcEngineEventHandler",
+        "description": "The SDK uses the RtcEngineEventHandler interface",
+        "parameters": [
+            {},
+            null,
             {
                 "param1": "value1"
             },

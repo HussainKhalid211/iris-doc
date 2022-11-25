@@ -78,9 +78,10 @@ class Tag2Doc:
         try:
             outList: List[str] = []
             for parameter in comment_source.parameters:
-                for key in parameter:
-                    outList.append(
-                        generate((key.rstrip("\n"), parameter[key])))
+                if parameter:
+                    for key in parameter:
+                        outList.append(
+                            generate((key.rstrip("\n"), parameter[key])))
 
             return '\n'.join(outList)
 
@@ -160,7 +161,7 @@ class Tag2Doc:
                         for it in tag_parameters_list:
                             if self.__commentSources[csk].parameters:
                                 for param in self.__commentSources[csk].parameters:
-                                    if list(param.keys())[0].lower() == it:
+                                    if param and len(list(param.keys())) > 0 and list(param.keys())[0].lower() == it:
                                         parameters.append(param)
                         self.__commentSources[csk].parameters = parameters
                         return self.__commentSources[csk]

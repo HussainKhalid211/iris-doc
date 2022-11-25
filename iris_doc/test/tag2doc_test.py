@@ -7,6 +7,48 @@ from iris_doc.tag2doc import Tag2Doc
 
 class CommentGroup(unittest.TestCase):
 
+    def test_commentWithEmptyParameters(self):
+        format: LanguageFormat = LanguageFormat(
+            comment1="",
+            comment2="///",
+            comment3="",
+            summary1="",
+            summary2="",
+            tag1="",
+            tag2="",
+            param1="*[",
+            param2="] ",
+            param3="",
+            return1="### Return",
+            return2="",
+            link1="",
+            link2="",
+            ignore="")
+        commentSource = CommentSource(
+            type_="class",
+            id="class_one_field1",
+            name="field1",
+            description="This is a class field",
+            parameters=[{}, None, {"param1": "param value"}],
+            returns="This is return",
+            deprecated="",
+            note="",
+            warning="",
+            is_hide=False)
+        commentSources: Dict[str, CommentSource] = {
+            "class_one_field1": commentSource}
+        result = Tag2Doc(format, commentSources)._generateComment(
+            format, commentSource)
+        expectedResult = """
+  /// This is a class field
+  ///
+  /// *[param1] param value
+  ///
+  /// ### Return
+  /// This is return
+    """
+        self.assertEqual(result, expectedResult.rstrip().lstrip('\n'))
+
     def test_comment2Only(self):
         format: LanguageFormat = LanguageFormat(
             comment1="",

@@ -184,13 +184,14 @@ class LanguageSpecificationModule:
                 self.__commentSources[element['id']] = finalCommentSource
 
                 for parameters in parent_parameters:
-                    for parameterk in parameters:
-                        parameterId = f'{finalCommentSource.id}_{parameterk.lower()}'
-                        self.__commentSources[parameterId] = CommentSource(
-                            id=parameterId,
-                            name=parameterk,
-                            description=parameters[parameterk],
-                            is_hide=finalCommentSource.is_hide)
+                    if parameters:
+                        for parameterk in parameters:
+                            parameterId = f'{finalCommentSource.id}_{parameterk.lower()}'
+                            self.__commentSources[parameterId] = CommentSource(
+                                id=parameterId,
+                                name=parameterk,
+                                description=parameters[parameterk],
+                                is_hide=finalCommentSource.is_hide)
             else:
                 self.__commentSources[element['id']] = finalCommentSource
 
