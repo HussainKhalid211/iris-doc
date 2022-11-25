@@ -179,7 +179,13 @@ class LanguageSpecificationModule:
                 json.dumps(element))
             parent_parameters = finalCommentSource.parameters
 
-            if (element['type_'] == "class" or element['type_'] == "enum") and len(parent_parameters) > 0:
+            # The split of parent id should be 2, e.g., class_rtcengine, enum_type
+            is_parent_id = len(new_id.split('_')) == 2
+
+            # Extract the parameters of class or enum as standalone CommentSource, make it more easily to find the
+            # member variables of class or enum on tag2doc phase.
+            if ((element['type_'] == "class" and is_parent_id) or element['type_'] == "enum") \
+                    and len(parent_parameters) > 0:
                 finalCommentSource.parameters = []
                 self.__commentSources[element['id']] = finalCommentSource
 
