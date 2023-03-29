@@ -13,7 +13,7 @@ class PostPhaseTS(PostPhase):
 
     def run(self) -> Any:
         p = subprocess.Popen(
-            ["yarn"],
+            ["yarn", "install", "--frozen-lockfile"],
             cwd=self.__executePath)
         p.wait()
         p = subprocess.Popen(
