@@ -17,6 +17,10 @@ class PostPhaseTS(PostPhase):
             cwd=self.__executePath)
         p.wait()
         p = subprocess.Popen(
+            ["yarn", "patch-package"],
+            cwd=self.__executePath)
+        p.wait()
+        p = subprocess.Popen(
             ["yarn", "eslint", "--ext", ".js,.ts,.tsx", ".", "--fix"],
             cwd=self.__executePath)
         p.wait()
