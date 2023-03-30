@@ -66,14 +66,14 @@ export abstract class IRtcEngine {
         file = self.__fileSystem.open(path, mode="w")
         file.write("""
 class MemberFunction {
-  getMediaPlayerId(): number {
+  public getMediaPlayerId(): number {
     const apiType = 'MediaPlayer_getMediaPlayerId';
     const jsonParams = {};
     const jsonResults = callIrisApi.call(this, apiType, jsonParams);
     return jsonResults.result;
   }
 
-  play(): number {
+  private play(): number {
     const apiType = 'MediaPlayer_play';
     const jsonParams = {};
     const jsonResults = callIrisApi.call(this, apiType, jsonParams);
@@ -89,7 +89,7 @@ class MemberFunction {
 /* class_memberfunction */
 class MemberFunction {
 /* api_memberfunction_getmediaplayerid */
-  getMediaPlayerId(): number {
+  public getMediaPlayerId(): number {
     const apiType = 'MediaPlayer_getMediaPlayerId';
     const jsonParams = {};
     const jsonResults = callIrisApi.call(this, apiType, jsonParams);
@@ -97,7 +97,7 @@ class MemberFunction {
   }
 
 /* api_memberfunction_play */
-  play(): number {
+  private play(): number {
     const apiType = 'MediaPlayer_play';
     const jsonParams = {};
     const jsonResults = callIrisApi.call(this, apiType, jsonParams);
