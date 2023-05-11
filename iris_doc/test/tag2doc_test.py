@@ -21,6 +21,7 @@ class CommentGroup(unittest.TestCase):
             param3="",
             return1="### Return",
             return2="",
+            return3="",
             link1="",
             link2="",
             ignore="")
@@ -63,6 +64,7 @@ class CommentGroup(unittest.TestCase):
             param3="",
             return1="### Return",
             return2="",
+            return3="",
             link1="",
             link2="",
             ignore="")
@@ -105,6 +107,7 @@ class CommentGroup(unittest.TestCase):
             param3="",
             return1="### Return",
             return2="",
+            return3="",
             link1="",
             link2="",
             ignore="")
@@ -149,6 +152,7 @@ class CommentGroup(unittest.TestCase):
             param3="",
             return1="### Return",
             return2="",
+            return3="",
             link1="",
             link2="",
             ignore="")
@@ -197,6 +201,7 @@ class SummaryGroup(unittest.TestCase):
             param3="",
             return1="### Return",
             return2="",
+            return3="",
             link1="",
             link2="",
             ignore="")
@@ -240,6 +245,7 @@ class SummaryGroup(unittest.TestCase):
             param3="",
             return1="### Return",
             return2="",
+            return3="",
             link1="",
             link2="",
             ignore="")
@@ -288,6 +294,7 @@ class ParamGroup(unittest.TestCase):
             param3="",
             return1="### Return",
             return2="",
+            return3="",
             link1="",
             link2="",
             ignore="")
@@ -330,6 +337,7 @@ class ParamGroup(unittest.TestCase):
             param3="",
             return1="### Return",
             return2="",
+            return3="",
             link1="",
             link2="",
             ignore="")
@@ -373,6 +381,7 @@ class ParamGroup(unittest.TestCase):
             param3="</param>",
             return1="### Return",
             return2="",
+            return3="",
             link1="",
             link2="",
             ignore="")
@@ -419,6 +428,7 @@ class ReturnGroup(unittest.TestCase):
             param3="",
             return1="<returns>",
             return2="",
+            return3="",
             link1="",
             link2="",
             ignore="")
@@ -460,7 +470,8 @@ class ReturnGroup(unittest.TestCase):
             param2="] ",
             param3="",
             return1="<returns>",
-            return2="</returns>",
+            return2="",
+            return3="</returns>",
             link1="",
             link2="",
             ignore="")
@@ -505,7 +516,8 @@ class GenerateCommentSmokeTest(unittest.TestCase):
             param2="] ",
             param3="",
             return1="<returns>",
-            return2="</returns>",
+            return2="",
+            return3="</returns>",
             link1="",
             link2="",
             ignore="")
@@ -550,7 +562,8 @@ class GenerateCommentSmokeTest(unittest.TestCase):
             param2="] ",
             param3="",
             return1="<returns>",
-            return2="</returns>",
+            return2="",
+            return3="</returns>",
             link1="",
             link2="",
             ignore="")
@@ -592,7 +605,8 @@ class GenerateCommentSmokeTest(unittest.TestCase):
             param2="] ",
             param3="",
             return1="<returns>",
-            return2="</returns>",
+            return2="",
+            return3="</returns>",
             link1="",
             link2="",
             ignore="@nodoc")
@@ -630,7 +644,8 @@ class GenerateCommentSmokeTest(unittest.TestCase):
             param2="] ",
             param3="",
             return1="<returns>",
-            return2="</returns>",
+            return2="",
+            return3="</returns>",
             link1="",
             link2="",
             ignore="@nodoc")
@@ -672,6 +687,7 @@ class Tag2DocTest(unittest.TestCase):
             param3="",
             return1="",
             return2="",
+            return3="",
             link1="",
             link2="",
             ignore="")
@@ -737,6 +753,7 @@ class Tag2DocTest(unittest.TestCase):
             param3="",
             return1="",
             return2="",
+            return3="",
             link1="",
             link2="",
             ignore="")
@@ -801,6 +818,7 @@ class Tag2DocTest(unittest.TestCase):
             param3="",
             return1="",
             return2="",
+            return3="",
             link1="",
             link2="",
             ignore="")
@@ -866,6 +884,7 @@ class Tag2DocTest(unittest.TestCase):
             param3="",
             return1="",
             return2="",
+            return3="",
             link1="",
             link2="",
             ignore="")
@@ -916,6 +935,7 @@ class Tag2DocTest(unittest.TestCase):
             param3="",
             return1="",
             return2="",
+            return3="",
             link1="",
             link2="",
             ignore="")

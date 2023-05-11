@@ -39,7 +39,8 @@ link1: "{@link"
 link2: "}"
 ignore: "@ignore"
 return1: "<returns>"
-return2: "</returns>"
+return2: ""
+return3: "</returns>"
 """)
 
         config_file.flush()
@@ -168,7 +169,8 @@ link1: "{@link"
 link2: "}"
 ignore: "@ignore"
 return1: "<returns>"
-return2: "</returns>"
+return2: ""
+return3: "</returns>"
         """)
 
         config_file.flush()

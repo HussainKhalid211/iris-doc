@@ -2,7 +2,7 @@ from enum import IntEnum
 import json
 import re
 from fs.base import FS
-from typing import Dict, List, Tuple
+from typing import Dict, List
 
 
 class Structure:
@@ -61,6 +61,7 @@ class LanguageFormat(Structure):
                  param3: str = None,
                  return1: str = None,
                  return2: str = None,
+                 return3: str = None,
                  link1: str = None,
                  link2: str = None,
                  ignore: str = None):
@@ -76,6 +77,7 @@ class LanguageFormat(Structure):
         self.param3 = param3
         self.return1 = return1
         self.return2 = return2
+        self.return3 = return3
         self.link1 = link1
         self.link2 = link2
         self.ignore = ignore
@@ -131,7 +133,6 @@ class LanguageSpecificationModule:
             id_split = id_.split('_')
 
             new_id = '_'.join(id_split)
-
             if self.__config.idPatternV2:
                 new_id_split = new_id.split('_')
 

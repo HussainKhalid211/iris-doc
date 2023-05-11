@@ -32,16 +32,16 @@ class Tag2Doc:
         return '\n'.join(outputLines)
 
     def __generatePairContent(self, pair1: str, pair2: str, indent: str, seperator: str, content: str) -> str:
-        if content == None or content == "":
+        if not content:
             return ""
 
         output: str = ""
-        if pair1 is not None and pair1 != '':
+        if pair1:
             output += f"{indent}{pair1}{seperator}"
 
         output += content
 
-        if pair2 is not None and pair2 != '':
+        if pair2:
             output += f"{seperator}{indent}{pair2}"
 
         return output
@@ -91,15 +91,15 @@ class Tag2Doc:
             return ''
 
     def __generateReturn(self, format: LanguageFormat, comment_source: CommentSource, indent: str) -> str:
-        if comment_source.returns == '':
+        if not comment_source.returns:
             return ''
 
         return self.__generatePairContent(
             format.return1,
-            format.return2,
+            format.return3,
             "",
             "\n",
-            comment_source.returns)
+            format.return2 + comment_source.returns)
 
     def _generateComment(self, format: LanguageFormat, comment_source: CommentSource = None, indent: int = 2) -> str:
         str_indent = self.__generateIndent(indent)

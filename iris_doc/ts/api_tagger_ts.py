@@ -26,9 +26,8 @@ class TSSyntaxMatcher(LanguageSyntaxMatcher):
             r'(abstract |get |set |public |private )([A-Za-z0-9_]+)\((.*)(\)?( {)?|;?)$', line.strip())
         if m:
             return m.group(2)
-
-        m = re.match(
-            r'([A-Za-z0-9_]+)\?\((.*)(\)?( {)?|;?)$', line.strip())
+        m = re.search(
+            r'([A-Za-z0-9_]+)\??\((.*)(\)?( {)?|;?)$', line.strip())
         if m:
             return m.group(1)
 
