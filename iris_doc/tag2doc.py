@@ -146,25 +146,29 @@ class Tag2Doc:
             return self.__commentSources[tag]
 
         if "##" in tag:
+            tag_no_parameters = tag.split("##")[0]
             tag_parameters = tag.split("##")[1]
             tag_parameters_list = tag_parameters.split("#")
             sort_tag_parameters_list = tag_parameters_list.copy()
             sort_tag_parameters_list.sort()
             for csk in self.__commentSources.keys():
                 if "##" in csk:
-                    parameters = csk.split("##")[1]
-                    parameters_list = parameters.split("#")
-                    sort_parameters_list = parameters_list.copy()
-                    sort_parameters_list.sort()
-                    if sort_tag_parameters_list == sort_parameters_list:
-                        parameters = []
-                        for it in tag_parameters_list:
-                            if self.__commentSources[csk].parameters:
-                                for param in self.__commentSources[csk].parameters:
-                                    if param and len(list(param.keys())) > 0 and list(param.keys())[0].lower() == it:
-                                        parameters.append(param)
-                        self.__commentSources[csk].parameters = parameters
-                        return self.__commentSources[csk]
+                    id_no_parameters = csk.split("##")[0]
+                    if tag_no_parameters == id_no_parameters:
+                        parameters = csk.split("##")[1]
+                        parameters_list = parameters.split("#")
+                        sort_parameters_list = parameters_list.copy()
+                        sort_parameters_list.sort()
+                        if sort_tag_parameters_list == sort_parameters_list:
+                            parameters = []
+                            for it in tag_parameters_list:
+                                if self.__commentSources[csk].parameters:
+                                    for param in self.__commentSources[csk].parameters:
+                                        if param and len(list(param.keys())) > 0 and list(param.keys())[
+                                            0].lower() == it:
+                                            parameters.append(param)
+                            self.__commentSources[csk].parameters = parameters
+                            return self.__commentSources[csk]
 
         # Allow fallback to the match id without parameter list if the parameter list not matched
         if "##" in tag:

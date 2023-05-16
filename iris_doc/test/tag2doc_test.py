@@ -673,6 +673,53 @@ class GenerateCommentSmokeTest(unittest.TestCase):
 
 class Tag2DocTest(unittest.TestCase):
 
+    def test_apiNotFoundSourceWithSameParam(self):
+        format: LanguageFormat = LanguageFormat(
+            comment1="/**",
+            comment2=" *",
+            comment3=" */",
+            summary1="",
+            summary2="",
+            tag1="",
+            tag2="",
+            param1="",
+            param2="",
+            param3="",
+            return1="",
+            return2="",
+            return3="",
+            link1="",
+            link2="",
+            ignore="")
+        commentSource = CommentSource(
+            type_="api",
+            id="api_irtcengine_setvideoencoderconfiguration",
+            name="setVideoEncoderConfiguration",
+            description="Sets the video encoder configuration.\nSets the encoder configuration for the local video.You can call this method either before or after joining a channel. If the user does not need to reset the video encoding properties after joining the channel, Agora recommends calling this method before enableVideo to reduce the time to render the first video frame.",
+            parameters=[
+                {
+                    "config": "Video profile. See VideoEncoderConfiguration ."}],
+            returns="0: Success.< 0: Failure.",
+            deprecated="",
+            note="",
+            warning="",
+            is_hide=False)
+        commentSources: Dict[str, CommentSource] = {
+            "api_irtcengine_setvideoencoderconfiguration##config": commentSource,
+        }
+        code = """
+    /* api_imediarecorder_startrecording##config */
+    abstract startRecording(config: MediaRecorderConfiguration): number;
+    """
+        result = Tag2Doc(format, commentSources).process(
+            code.rstrip().lstrip('\n'))
+
+        expectedResult = """
+    /* api_imediarecorder_startrecording##config */
+    abstract startRecording(config: MediaRecorderConfiguration): number;
+    """
+        self.assertEqual(result, expectedResult.rstrip().lstrip('\n'))
+
     def test_classWithUnderscore(self):
         format: LanguageFormat = LanguageFormat(
             comment1="/**",
@@ -682,8 +729,8 @@ class Tag2DocTest(unittest.TestCase):
             summary2="",
             tag1="",
             tag2="",
-            param1="*[",
-            param2="] ",
+            param1="",
+            param2="",
             param3="",
             return1="",
             return2="",
@@ -748,8 +795,8 @@ class Tag2DocTest(unittest.TestCase):
             summary2="",
             tag1="",
             tag2="",
-            param1="*[",
-            param2="] ",
+            param1="",
+            param2="",
             param3="",
             return1="",
             return2="",
@@ -813,8 +860,8 @@ class Tag2DocTest(unittest.TestCase):
             summary2="",
             tag1="",
             tag2="",
-            param1="*[",
-            param2="] ",
+            param1="",
+            param2="",
             param3="",
             return1="",
             return2="",
