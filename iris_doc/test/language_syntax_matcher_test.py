@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 import fs.memoryfs
 import unittest
 from iris_doc.api_tagger import ApiTagger, LanguageSyntaxMatcher, LineScanner, TagBuilder
@@ -15,7 +15,7 @@ class FakeSyntaxMatcher(DartSyntaxMatcher):
     def __init__(self) -> None:
         self.function_blocks = []
 
-    def findFunctionNameFromBlock(self, block: str) -> str:
+    def findFunctionNameFromBlock(self, block: str, current_name: Optional[str]) -> str:
         self.function_blocks.append(block)
         return "FixedFakeFuncName"
 

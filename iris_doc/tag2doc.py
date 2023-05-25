@@ -26,7 +26,8 @@ class Tag2Doc:
     def __generateDescription(self, format: LanguageFormat, description: str, indent: str) -> str:
         outputLines: List[str] = []
         for line in description.split('\n'):
-            ws = ' ' if line.strip() != "" else ''
+            ws = ' ' if line.strip() != '' else ''
+            # TODO: Find and replace links in ws
             outputLines.append(f"{indent}{format.comment2}{ws}{line}")
 
         return '\n'.join(outputLines)

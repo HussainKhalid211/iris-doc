@@ -86,10 +86,13 @@ class TSSyntaxMatcher(LanguageSyntaxMatcher):
     def matchClassScopeEnd(self, line: str) -> bool:
         return line.strip().startswith("}") and not line.strip().endswith("{")
 
-    def findFunctionParameterList(self, function_name: str, line: str) -> List[str]:
+    def findFunctionParameterList(self, function_name: str, lines: List[str]) -> List[str]:
+        single_line = " ".join(map(
+            lambda x: x.strip(), lines
+        ))
         parameterList: List[str] = []
         m = re.match(
-            r'(.*)' + function_name + r'\??\((.*)\)(.*)', line.strip())
+            r'(.*)' + function_name + r'\??\((.*)\)(.*)', single_line)
         if m:
             parameterBlock = m.group(2)
             parameterBlockSplit = parameterBlock.split(',')

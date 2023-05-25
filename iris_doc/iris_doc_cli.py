@@ -14,6 +14,9 @@ from iris_doc.api_tagger import ApiTagger, TagBuilder
 from iris_doc.dart.export_file_parser_dart import ExportFileParserDart
 from iris_doc.dart.api_tagger_dart import DartTagBuilder
 from iris_doc.dart.post_phase_dart import PostPhaseDart
+from iris_doc.oc.export_file_parser_oc import ExportFileParserObjC
+from iris_doc.oc.api_tagger_oc import ObjCTagBuilder
+from iris_doc.oc.post_phase_oc import PostPhaseObjC
 from iris_doc.export_file_parser import DefaultExportFileParser, ExportFileParser
 from iris_doc.language_specification import CommentSource, LanguageFormat, LanguageSpecificationModule, LanguageSpecificationConfig
 
@@ -121,7 +124,7 @@ def run():
                         help='The path of the doc json file')
     parser.add_argument('--template-url', type=str, action='append',
                         help='The github release url of the template file, which allow set multiple times, the json will be merge in file order')
-    parser.add_argument('--language', choices=['dart', 'ts', 'c_sharp'])
+    parser.add_argument('--language', choices=['dart', 'ts', 'c_sharp', 'oc'])
     parser.add_argument('--debug-show-tag', default=False, action='store_true',
                         help='Whether change the dita id type from callback to api')
     parser.add_argument('--export-file-path', type=str,
@@ -158,6 +161,13 @@ def run():
         tagBuilder = DartTagBuilder()
         exportFileDir = os.path.dirname(exportFilePath)
         postPhase = PostPhaseDart(exportFileDir)
+    elif lang == "oc":
+        isCallback2class = False
+        isCallback2api = True
+        exportFileParser = ExportFileParserObjC(fileSystem=fileSystem)
+        tagBuilder = ObjCTagBuilder()
+        exportFileDir = os.path.dirname(exportFilePath)
+        postPhase = PostPhaseObjC(exportFileDir)
     elif lang == "ts":
         isCallback2class = False
         isCallback2api = True

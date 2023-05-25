@@ -128,10 +128,13 @@ class DartSyntaxMatcher(LanguageSyntaxMatcher):
     def matchClassScopeEnd(self, line: str) -> bool:
         return line.strip().startswith("}")
 
-    def findFunctionParameterList(self, function_name: str, line: str) -> List[str]:
+    def findFunctionParameterList(self, function_name: str, lines: List[str]) -> List[str]:
+        single_line = "".join(map(
+            lambda x: x.strip(), lines
+        ))
         parameterList: List[str] = []
         m = re.match(
-            r'(.*)' + function_name + r'\(\{?([0-9a-zA-Z,=<>.?()\s]*)\}?\)(.*)', line.strip())
+            r'(.*)' + function_name + r'\(\ ?\{?([0-9a-zA-Z,=<>.?()\s]*)\}?\)(.*)', single_line)
         if m:
             parameterBlock = m.group(2).lstrip('{').rstrip('}')
             parameterBlockSplit = parameterBlock.split(',')
