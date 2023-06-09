@@ -70,6 +70,79 @@ class TestLanguageSpecificationModule(unittest.TestCase):
         self.assertIn("class_rtcengineeventhandler", commentSources.keys())
         self.assertIn("class_rtcenginecontext", commentSources.keys())
 
+    def testMatchAliases(self):
+        path = "testMatchTagPatternV2.json"
+        self.__fileSystem.create(path, wipe=True)
+        file = self.__fileSystem.open(path, mode="w")
+        file.write("""
+[
+    {
+        "id": "class_aliashandler",
+        "name": "RtcEngineEventHandler",
+        "description": "Alias interface",
+        "parameters": [],
+        "returns": "",
+        "is_hide": true
+    },
+    {
+        "id": "class_irtcengineeventhandler",
+        "name": "RtcEngineEventHandler",
+        "description": "The SDK uses the RtcEngineEventHandler interface",
+        "parameters": [],
+        "returns": "",
+        "is_hide": false
+    },
+    {
+        "id": "class_anotheraliashandler",
+        "name": "RtcEngineEventHandler",
+        "description": "Alias interface 2",
+        "parameters": [],
+        "returns": "",
+        "is_hide": true
+    },
+    {
+        "id": "callback_aliashandler_onfirstremotevideoframe",
+        "name": "onFirstRemoteVideoFrame",
+        "description": "Occurs when the renderer receives the first frame of the remote video.",
+        "parameters": [
+        ],
+        "returns": "",
+        "is_hide": false
+    },
+    {
+        "id": "class_rtcengineconfig_ng",
+        "name": "RtcEngineContext",
+        "description": "Definition of RtcEngineContext.",
+        "parameters": [
+        ],
+        "returns": "",
+        "is_hide": false
+    }
+]
+        """)
+        file.flush()
+        file.close()
+
+        languageSpecificationConfig: LanguageSpecificationConfig = LanguageSpecificationConfig(
+            isCallback2class=True,
+            isCallback2api=False,
+            idPatternV2=True)
+
+        module = LanguageSpecificationModule(
+            self.__fileSystem, languageSpecificationConfig)
+        module.addTemplateFilePath(path)
+        module.deserialize()
+
+        commentSources = module.getAllCommentSources()
+
+        self.assertEqual(len(commentSources.keys()), 3)
+        self.assertIn("class_rtcengineeventhandler_onfirstremotevideoframe", commentSources.keys())
+        self.assertIn("class_rtcengineeventhandler", commentSources.keys())
+        self.assertIn("class_rtcenginecontext", commentSources.keys())
+        self.assertEqual(
+            commentSources['class_rtcengineeventhandler'].description, "The SDK uses the RtcEngineEventHandler interface"
+        )
+
     def testMultipleTemplateFile(self):
         path = "testMultipleTemplateFile1.json"
         self.__fileSystem.create(path, wipe=True)

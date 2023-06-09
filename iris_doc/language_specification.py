@@ -147,7 +147,6 @@ class LanguageSpecificationModule:
                     newName1 = parentElement['name'].lower()
                 else:
                     newName1 = element['name'].lower()
-
                 if self.__config.isCallback2api and newType == "callback":
                     newType = "api"
 
@@ -173,7 +172,9 @@ class LanguageSpecificationModule:
 
             element['id'] = new_id
 
-            if element['id'] in self.__commentSources:
+            # Check if next id already exists
+            # If it does exist, check if the saved value is set to is_hide, if it's not, then ignore the new value.
+            if element['id'] in self.__commentSources and not self.__commentSources[element['id']].is_hide:
                 continue
 
             finalCommentSource: CommentSource = CommentSource.from_json(
