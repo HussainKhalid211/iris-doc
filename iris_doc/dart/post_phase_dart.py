@@ -11,5 +11,5 @@ class PostPhaseDart(PostPhase):
         self.__executePath = executePath
 
     def run(self) -> Any:
-        p = subprocess.Popen(["flutter", "format", "."], cwd=self.__executePath)
+        p = subprocess.Popen(["dart", "format", "."], cwd=self.__executePath)
         p.wait()
